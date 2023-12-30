@@ -1,0 +1,60 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #3cb7dd; /* Celeste más oscuro */
+  color: white;
+}
+
+.navbar-logo img {
+  max-width: 100px;
+}
+
+.navbar-search input[type="text"] {
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+  width: 250px;
+}
+
+/* Estilos para el SideNav */
+.sidenav {
+  height: 100%;
+  width: 200px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #3cb7dd; /* Celeste más oscuro */
+  padding-top: 70px;
+  color: white;
+}
+
+.sidenav a {
+  padding: 10px;
+  text-decoration: none;
+  font-size: 18px;
+  color: white;
+  display: block;
+}
+
+.sidenav i {
+  margin-right: 10px;
+}
+
+/* Estilos para el contenido principal */
+.content {
+  display: flex;
+}
+
+.main {
+  flex: 1;
+  padding: 20px;
+  margin-left: 200px; /* Ajustar al ancho del SideNav */
+}
+
+/* Estilos para los enlaces en el SideNav */
+.sidenav a:hover {
+  background-color: #4dafe3; /* Cambio de color al pasar el ratón */
+}

@@ -1,0 +1,58 @@
+.contenedorDatos{
+  width:100%;
+  height:auto;
+  display:flex;
+}
+
+.contenedorDatosIzq{
+  
+  width:70%;
+}
+.contenedorDatosDer{
+  width:30%;
+
+}
+
+.contenedorDatosDer img{
+  width:80%;
+  height:300px;
+  background-image: url("/usauri.png");
+  background-size:cover;
+  background-position:center;
+  margin-top:10%;
+}
+.TitulosR{
+  padding-top:3%;
+  width:90%;
+  height:auto;
+  margin:auto;
+  margin-bottom:2%;
+  border-bottom: 1px solid #000;
+}
+.datosRegistrar{
+  width:85%;
+  margin:auto;
+  
+}
+.datosRegistrar input{
+  padding:1%;
+  border:none;
+  width:95%;
+  border-radius:0px;
+  border-bottom: 1px solid #000;
+  box-shadow: 0 4px 0px rgba(0, 0, 0, 0.1);
+  
+}
+
+.datosRegistrar label{
+  display: block;
+  text-align: left;
+  margin-top:10px;
+}
+.datosRegistrar td{
+  width:50%;
+  border: none;
+  padding:0px;
+  
+}
+
