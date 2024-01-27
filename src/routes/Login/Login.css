@@ -56,6 +56,7 @@
 input{
   border:none;
   border-bottom: 2px solid #0F4E89;
+  color:black!important;
 }
 
 .accionesLogin button{
@@ -73,5 +74,3 @@ input{
   width: 60px; 
   height: 60px; 
 }
-
-
