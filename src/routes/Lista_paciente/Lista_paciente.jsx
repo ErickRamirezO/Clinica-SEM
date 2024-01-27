@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUser,
@@ -7,15 +7,26 @@ import {
   faSignOutAlt,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
-import "./Lista_paciente.css"; // Agrega tu archivo CSS según sea necesario
+import { Modal, Button } from "react-bootstrap";
+import "./Lista_paciente.css";
 
 export default function Lista_paciente() {
+  const [showModal, setShowModal] = useState(false);
+
+  const handleModalOpen = () => {
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+
   return (
     <div className="listaP">
       {/* Barra superior */}
       <div className="TopBar">
         <div className="logo">
-          <img src="/logo.png"></img>
+          <img src="/logo.png" alt="Logo"></img>
         </div>
         <div className="SearchContainer">
           <input type="text" placeholder="Buscar paciente" />
@@ -60,13 +71,87 @@ export default function Lista_paciente() {
                 <td>Enfermito</td>
                 <td>
                   <button id="btn1">Ver Historias Clínicas</button>
-                  <button id="btn2">Crear Historia Clínica</button>
+                  <button id="btn2" onClick={handleModalOpen}>
+                    Crear Historia Clínica
+                  </button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
+
+      {/* Modal para Crear Historia Clínica */}
+      <Modal show={showModal} onHide={handleModalClose} size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title>Crear Historia Clínica</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div style={{ textAlign: "right", marginBottom: "20px" }}>
+            <p>{new Date().toLocaleDateString()}</p>
+          </div>
+          <form>
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label">
+                Nombres Completos:
+              </label>
+              <div className="col-sm-9">
+                <input type="text" className="form-control" />
+              </div>
+            </div>
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label">
+                Apellidos Completos:
+              </label>
+              <div className="col-sm-9">
+                <input type="text" className="form-control" />
+              </div>
+            </div>
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label">
+                Fecha de Nacimiento:
+              </label>
+              <div className="col-sm-9">
+                <input type="date" className="form-control" />
+              </div>
+            </div>
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label">Estatura (cm):</label>
+              <div className="col-sm-9">
+                <input type="number" className="form-control" />
+              </div>
+            </div>
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label">Cédula:</label>
+              <div className="col-sm-9">
+                <input type="number" className="form-control" />
+              </div>
+            </div>
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label">
+                Número Telefónico:
+              </label>
+              <div className="col-sm-9">
+                <input type="number" className="form-control" />
+              </div>
+            </div>
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label">Peso (kg):</label>
+              <div className="col-sm-9">
+                <input type="number" className="form-control" />
+              </div>
+            </div>
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleModalClose}>
+            Cerrar
+          </Button>
+          <Button variant="primary" onClick={handleModalClose}>
+            Guardar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
