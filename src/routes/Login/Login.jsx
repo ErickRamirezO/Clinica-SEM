@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import "./Login.css";
+
+const MySwal = withReactContent(Swal);
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -24,10 +28,20 @@ export default function Login() {
 
       if (response.ok) {
         // Si la solicitud es exitosa, redirige a la página deseada
+        await MySwal.fire({
+          icon: 'success',
+          title: 'Inicio de sesión exitoso',
+          text: '¡Bienvenido de nuevo!',
+          timer: 2000,
+          showConfirmButton: false,
+        });
         navigate('/lista-de-pacientes');
       } else {
-        // Manejar errores, por ejemplo, mostrar un mensaje de error
-        console.error("Error al iniciar sesión");
+        MySwal.fire({
+          icon: 'error',
+          title: 'Error al iniciar sesión',
+          text: 'Hubo un problema al intentar iniciar sesión. Por favor, inténtalo de nuevo.',
+        });
       }
     } catch (error) {
       console.error("Error de red:", error);
