@@ -8,6 +8,7 @@ import Chat from "./routes/Chat/Chat";
 import ErrorPage from "./routes/Error/Error";
 import "./index.css";
 import Registro from "./routes/Registro/Registro";
+import MiPerfil from "./routes/Registro/MiPerfil";
 import Historial from "./routes/Historial/Historial";
 
 //RUTAS
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "/registro",
     element: <Registro />,
+  },
+  {
+    path: "/mi-perfil",
+    element: <MiPerfil />,
   },
   {
     path: "/historial-paciente",

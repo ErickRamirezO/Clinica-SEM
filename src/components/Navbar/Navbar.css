@@ -1,33 +1,27 @@
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 30px;
-  background-color: #3cb7dd; /* Celeste más oscuro */
-  color: white;
+.custom-navbar{
+  z-index: 1000;
+  background-color: #3cb7dd!important;
 }
-
-.navbar-logo img {
-  max-width: 100px;
+.img_nav_logo{
+  width: 150px;
 }
-
-.navbar-search input[type="text"] {
-  padding: 8px;
-  border-radius: 5px;
-  border: none;
-  width: 250px;
+.logo-container {
+  order: -1; /* Mueve la imagen al extremo izquierdo */
 }
-
+.search-bar {
+  width: 200px; /* Establece el ancho deseado para la barra de búsqueda */
+}
 /* Estilos para el SideNav */
 .sidenav {
+  display: block;
   height: 100%;
   width: 200px;
   position: fixed;
-  z-index: 1;
-  top: 0;
+  z-index: -1;
+  top: 0px;
   left: 0;
   background-color: #3cb7dd; /* Celeste más oscuro */
-  padding-top: 70px;
+  padding-top: 100px;
   color: white;
 }
 
@@ -56,5 +50,5 @@
 
 /* Estilos para los enlaces en el SideNav */
 .sidenav a:hover {
-  background-color: #4dafe3; /* Cambio de color al pasar el ratón */
+  background-color: #7ec8f0; /* Cambio de color al pasar el ratón */
 }
