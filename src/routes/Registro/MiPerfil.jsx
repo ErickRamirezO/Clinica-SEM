@@ -1,9 +1,36 @@
-import React from "react";
+import React ,{ useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./Registro.css";
-
+import Layout from "../../components/Navbar/Navbar";
 export default function miPerfil() {
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    fetch("/auth/profile", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // Aquí puedes incluir cualquier token de autenticación necesario
+        // Por ejemplo, si estás usando tokens JWT, puedes incluirlo como un header de autorización
+        // "Authorization": `Bearer ${token}`
+      }
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Error al obtener datos del perfil');
+      }
+    })
+    .then(data => {
+      setUserData(data);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }, []);
   return (
+    <Layout>
     <div className="contenedorDatos">
       <div className="contenedorDatosIzq">
         <h2 className="TitulosR"> &nbsp; &nbsp; Iformación General</h2>
@@ -149,5 +176,6 @@ export default function miPerfil() {
         <img src="/usuari.png" alt="Usuario"></img>
       </div>
     </div>
+    </Layout>
   );
 }
