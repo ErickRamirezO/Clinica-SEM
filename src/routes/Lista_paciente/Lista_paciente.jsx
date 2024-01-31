@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Modal, Button } from "react-bootstrap";
 import "./Lista_paciente.css";
-
+import Layout from "../../components/Navbar/Navbar";
 export default function Lista_paciente() {
   const [showModal, setShowModal] = useState(false);
 
@@ -22,35 +22,12 @@ export default function Lista_paciente() {
   };
 
   return (
+    <Layout>
     <div className="listaP">
-      {/* Barra superior */}
-      <div className="TopBar">
-        <div className="logo">
-          <img src="/logo.png" alt="Logo"></img>
-        </div>
-        <div className="SearchContainer">
-          <input type="text" placeholder="Buscar paciente" />
-          <FontAwesomeIcon icon={faMagnifyingGlass} />
-        </div>
-      </div>
+      
 
       {/* Contenedor de la barra lateral y el contenido */}
       <div className="ContainerSide">
-        {/* Barra lateral izquierda */}
-        <div className="SideBar">
-          <div className="SideBarItem" title="User">
-            <FontAwesomeIcon icon={faUser} size="2x" />
-          </div>
-          <div className="SideBarItem" title="Chat">
-            <FontAwesomeIcon icon={faComments} size="2x" />
-          </div>
-          <div className="SideBarItem" title="My Profile">
-            <FontAwesomeIcon icon={faUserCircle} size="2x" />
-          </div>
-          <div className="SideBarItem" title="Logout">
-            <FontAwesomeIcon icon={faSignOutAlt} size="2x" />
-          </div>
-        </div>
 
         {/* Contenido */}
         <div className="Contenido">
@@ -66,11 +43,11 @@ export default function Lista_paciente() {
             </thead>
             <tbody>
               <tr>
-                <td>Rocky Kakaroto Estofado de Pollo</td>
+                <td>Juan Jose Flores</td>
                 <td>01/01/2023</td>
-                <td>Enfermito</td>
+                <td>Dolor de estomago</td>
                 <td>
-                  <button id="btn1">Ver Historias Clínicas</button>
+                <a href="/historial-paciente"><button id="btn1" >Ver Historias Clínicas</button></a>
                   <button id="btn2" onClick={handleModalOpen}>
                     Crear Historia Clínica
                   </button>
@@ -153,5 +130,6 @@ export default function Lista_paciente() {
         </Modal.Footer>
       </Modal>
     </div>
+    </Layout>
   );
 }

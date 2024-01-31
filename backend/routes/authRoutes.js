@@ -1,22 +1,71 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
+const User = require('../models/User');
 
 const router = express.Router();
 
 // Registro de usuario
+// En tu archivo authRoutes.js
+
+// Ruta para obtener los datos del usuario actual
+router.get('/profile', async (req, res) => {
+  try {
+    // Aquí obtienes el usuario actual autenticado (puedes usar información del token de autenticación)
+    const currentUser = req.user; // Por ejemplo, si estás usando Passport.js, puedes acceder al usuario autenticado a través de req.user
+    
+    // Si el usuario no está autenticado, responde con un error
+    if (!currentUser) {
+      return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+
+    // Si el usuario está autenticado, responde con los datos del usuario
+    res.status(200).json(currentUser);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Registro de usuario
 router.post('/register', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const {
+      username,
+      password,
+      apellido,
+      caPrincipal,
+      caSecundaria,
+      cedula,
+      correo,
+      direccion,
+      especialidad,
+      nacimiento,
+      nombre,
+      pais,
+      sexo,
+      telefono
+    } = req.body;
+    
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = new User({
+    const newUser = new User({
       username,
       password: hashedPassword,
+      apellido,
+      caPrincipal,
+      caSecundaria,
+      cedula,
+      correo,
+      direccion,
+      especialidad,
+      nacimiento,
+      nombre,
+      pais,
+      sexo,
+      telefono
     });
 
-    await user.save();
+    await newUser.save();
 
     res.status(201).json({ message: 'Usuario registrado exitosamente' });
   } catch (error) {
