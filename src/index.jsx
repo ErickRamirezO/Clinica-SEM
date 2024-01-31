@@ -8,7 +8,9 @@ import Chat from "./routes/Chat/Chat";
 import ErrorPage from "./routes/Error/Error";
 import "./index.css";
 import Registro from "./routes/Registro/Registro";
+import MiPerfil from "./routes/Registro/MiPerfil";
 import Historial from "./routes/Historial/Historial";
+
 
 //RUTAS
 const router = createBrowserRouter([
@@ -34,9 +36,14 @@ const router = createBrowserRouter([
     element: <Registro />,
   },
   {
+    path: "/mi-perfil",
+    element: <MiPerfil />,
+  },
+  {
     path: "/historial-paciente",
     element: <Historial />,
   },
+ 
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
