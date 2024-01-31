@@ -107,10 +107,12 @@ router.post('/login', async (req, res) => {
     }
   });
 
+  //--------------------------------------------------------------------------------------------------PACIENTES
   // Ruta para registrar un nuevo paciente
 router.post('/registro-paciente', async (req, res) => {
   try {
     const {
+      fechaCreacion,
       nombres,
       apellidos,
       fechaNacimiento,
@@ -121,6 +123,7 @@ router.post('/registro-paciente', async (req, res) => {
     } = req.body;
 
     const nuevoPaciente = new Paciente({
+      fechaCreacion,
       nombres,
       apellidos,
       fechaNacimiento,
@@ -137,6 +140,35 @@ router.post('/registro-paciente', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Ruta para obtener la lista de pacientes
+router.get('/lista-pacientes', async (req, res) => {
+  try {
+    const pacientes = await Paciente.find();
+
+    res.status(200).json(pacientes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Ruta para actualizar un paciente
+router.put('/actualizar-paciente/:id', async (req, res) => {
+  try {
+    const pacienteId = req.params.id;
+    const updatedPaciente = req.body; // Los datos actualizados vienen en el cuerpo de la solicitud
+
+    // Realiza la actualización en la base de datos
+    const result = await Paciente.findByIdAndUpdate(pacienteId, updatedPaciente, { new: true });
+
+    res.json(result);
+  } catch (error) {
+    console.error('Error al actualizar paciente:', error);
+    res.status(500).json({ error: 'Error al actualizar paciente' });
+  }
+});
+
+//-------------------------------------------------------------------------------------------------------------------
 
 
 module.exports = router;
