@@ -11,6 +11,7 @@ import Registro from "./routes/Registro/Registro";
 import MiPerfil from "./routes/Registro/MiPerfil";
 import Historial from "./routes/Historial/Historial";
 
+
 //RUTAS
 const router = createBrowserRouter([
   {
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
     path: "/historial-paciente",
     element: <Historial />,
   },
+ 
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

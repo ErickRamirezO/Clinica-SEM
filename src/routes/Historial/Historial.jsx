@@ -1,8 +1,9 @@
 import React from "react";
 import "./historial.css";
-
+import Layout from "../../components/Navbar/Navbar";
 export default function Historial() {
   return (
+    <Layout>
     <div className="ContenedorHistorial">
         <div className="ContenedorHistorialIzq">
             <div className="IzqInformacion">
@@ -107,5 +108,6 @@ export default function Historial() {
 
         </div>
     </div>
+    </Layout>
   );
 }
