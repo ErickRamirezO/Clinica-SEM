@@ -7,6 +7,7 @@ export default function Lista_paciente() {
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     nombres: "",
+    fechaCreacion: "",
     apellidos: "",
     fechaNacimiento: "",
     estatura: 0,
