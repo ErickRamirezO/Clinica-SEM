@@ -149,7 +149,7 @@ export default function Lista_paciente() {
                   <tr key={paciente._id}>
                     <td>{`${paciente.nombres} ${paciente.apellidos}`}</td>
                     <td><p>{new Date().toLocaleDateString()}</p></td>
-                    <td>{/* Agrega la lógica para mostrar el diagnóstico */}</td>
+                    <td><p>Paciente resgistrado</p></td>
                     <td>
                     <a href="/historial-paciente">
                         <button id="btn1">Ver Historias Clínicas</button>

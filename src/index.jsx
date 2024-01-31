@@ -40,7 +40,7 @@ const router = createBrowserRouter([
     element: <MiPerfil />,
   },
   {
-    path: "/historial-paciente/:pacienteId",
+    path: "/historial-paciente",
     element: <Historial />,
   },
 
