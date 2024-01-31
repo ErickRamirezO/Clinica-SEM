@@ -17,7 +17,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Login />,
-    errorElement: <ErrorPage/>,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/chat",
@@ -40,10 +40,10 @@ const router = createBrowserRouter([
     element: <MiPerfil />,
   },
   {
-    path: "/historial-paciente",
+    path: "/historial-paciente/:pacienteId",
     element: <Historial />,
   },
- 
+
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
