@@ -2,6 +2,8 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const Paciente = require('../models/Paciente');
+
 
 const router = express.Router();
 
@@ -104,5 +106,37 @@ router.post('/login', async (req, res) => {
       res.status(500).json({ message: 'Error interno del servidor' });
     }
   });
+
+  // Ruta para registrar un nuevo paciente
+router.post('/registro-paciente', async (req, res) => {
+  try {
+    const {
+      nombres,
+      apellidos,
+      fechaNacimiento,
+      estatura,
+      cedula,
+      telefono,
+      peso
+    } = req.body;
+
+    const nuevoPaciente = new Paciente({
+      nombres,
+      apellidos,
+      fechaNacimiento,
+      estatura,
+      cedula,
+      telefono,
+      peso
+    });
+
+    await nuevoPaciente.save();
+
+    res.status(201).json({ message: 'Paciente registrado exitosamente' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 module.exports = router;
