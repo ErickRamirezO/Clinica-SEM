@@ -59,6 +59,14 @@ input{
   color:black!important;
 }
 
+.accionesLogin{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap:10px;
+}
+
 .accionesLogin button{
   box-shadow: 1px 1px 8px #d6d6d6;
   border-radius:7px;

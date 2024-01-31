@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createClient } from '@supabase/supabase-js'
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub} from "@fortawesome/free-brands-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import "./Login.css";
 
 const MySwal = withReactContent(Swal);
+
+const supabaseUrl = 'https://emhxsaqqpdeexvmipyzm.supabase.co';
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtaHhzYXFxcGRlZXh2bWlweXptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDY1MzI3NTYsImV4cCI6MjAyMjEwODc1Nn0.H8-mEKh1DI4-jeLhpXr-mIb-Kzl6L7d36vecyvJllqY";
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -48,43 +54,76 @@ export default function Login() {
     }
   };
 
-  return (
-    <div className="Container_ext">
-      <div className="Container">
-        <div className="LoginContainer">
-          <div className="UserIconLogin">
-            <FontAwesomeIcon
-              icon={faUser}
-              size="2xl"
-              style={{ color: "#ffffff" }}
-            />
-          </div>
-          <form onSubmit={handleLogin}>
-            <label htmlFor="username">Usuario:</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <label htmlFor="password">Contraseña:</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <div className="accionesLogin">
-              <button type="submit">Iniciar sesión</button>
-              <Link to="/registro">
-                <button>Registro</button>
-              </Link>
+
+  useEffect(() => {
+    checkUser();
+    const hashchangeListener = () => checkUser();
+    window.addEventListener('hashchange', hashchangeListener);
+
+    return () => {
+      window.removeEventListener('hashchange', hashchangeListener);
+    };
+  }, []);
+  
+  async function checkUser() {
+    const user = supabase.auth.user;
+    setUsername(user);
+  }
+  async function signInWithGithub() {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'github',
+    })
+    // Handle the result as needed
+    if (error) {
+      console.error("Error al iniciar sesión con GitHub:", error);
+    } else {
+      // Success
+      navigate('/lista-de-pacientes');
+      return;
+    }
+  }
+    return (
+      <div className="Container_ext">
+        <div className="Container">
+          <div className="LoginContainer">
+            <div className="UserIconLogin">
+              <FontAwesomeIcon
+                icon={faUser}
+                size="2xl"
+                style={{ color: "#ffffff" }}
+              />
             </div>
-          </form>
+            <form onSubmit={handleLogin}>
+              <label htmlFor="username">Usuario:</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <label htmlFor="password">Contraseña:</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <div className="accionesLogin">
+                <button type="submit">Iniciar sesión</button>
+                <button type="button" onClick={signInWithGithub}>
+                  Iniciar sesión con GitHub
+                  <FontAwesomeIcon icon={faGithub} />
+                </button>
+                <Link to="/registro">
+                  <button>Registro</button>
+                </Link>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+
 }
