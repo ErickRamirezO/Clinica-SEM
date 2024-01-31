@@ -69,7 +69,7 @@ export default function Registro() {
       console.error("Error:", error);
     }
   };
-main
+
   return (
     
     <div className="contenedorDatos">
@@ -79,7 +79,6 @@ main
       <div className="contenedorDatosIzq">
         <h2 className="TitulosR"> &nbsp; &nbsp;  Información General</h2>
         <form onSubmit={handleSubmit}>
- HEAD
           <table className="datosRegistrar">
             <tr>
               <td>
