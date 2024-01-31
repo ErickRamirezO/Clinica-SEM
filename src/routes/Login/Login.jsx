@@ -35,7 +35,7 @@ export default function Login() {
           timer: 2000,
           showConfirmButton: false,
         });
-        navigate('/lista-de-pacientes');
+        navigate('/mi-perfil');
       } else {
         MySwal.fire({
           icon: 'error',
