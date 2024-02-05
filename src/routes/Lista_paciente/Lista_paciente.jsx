@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 import "./Lista_paciente.css";
 import Layout from "../../components/Navbar/Navbar";
+import { Link } from "react-router-dom";
 
 export default function Lista_paciente() {
   const [showModal, setShowModal] = useState(false);
@@ -76,12 +77,24 @@ export default function Lista_paciente() {
 
   const handleGuardar = async () => {
     try {
+      // Verificar si el paciente ya existe
+      const pacienteExistente = pacientes.find(
+        (paciente) =>
+          paciente.nombres === formData.nombres &&
+          paciente.apellidos === formData.apellidos
+      );
+
+      if (pacienteExistente) {
+        setMensajeError("¡Usuario existente!");
+        return;
+      }
+      
       const endpoint = selectedPaciente
         ? `http://localhost:3001/auth/actualizar-paciente/${selectedPaciente._id}`
         : "http://localhost:3001/auth/registro-paciente";
-  
+
       const method = selectedPaciente ? "PUT" : "POST";
-  
+
       const response = await fetch(endpoint, {
         method,
         headers: {
@@ -89,7 +102,7 @@ export default function Lista_paciente() {
         },
         body: JSON.stringify(formData),
       });
-  
+
       if (response.ok) {
         console.log(
           selectedPaciente
@@ -151,9 +164,9 @@ export default function Lista_paciente() {
                     <td><p>{new Date().toLocaleDateString()}</p></td>
                     <td><p>Paciente resgistrado</p></td>
                     <td>
-                    <a href="/historial-paciente">
+                      <Link to={`/historial-paciente/${paciente._id}`}>
                         <button id="btn1">Ver Historias Clínicas</button>
-                      </a>
+                      </Link>
                       <button id="btnActualizarHistorial" onClick={() => handleUpdateModalOpen(paciente)}>
                         Actualizar Historia Clínica
                       </button>
@@ -283,48 +296,48 @@ export default function Lista_paciente() {
 
 
         <Modal show={showUpdateModal} onHide={handleUpdateModalClose} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>Actualizar Historia Clínica</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <form>
-            <div className="form-group row">
-              <label className="col-sm-3 col-form-label">Nombres Completos:</label>
-              <div className="col-sm-9">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="nombres"
-                  value={formData.nombres}
-                  onChange={handleInputChange}
-                />
+          <Modal.Header closeButton>
+            <Modal.Title>Actualizar Historia Clínica</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <form>
+              <div className="form-group row">
+                <label className="col-sm-3 col-form-label">Nombres Completos:</label>
+                <div className="col-sm-9">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="nombres"
+                    value={formData.nombres}
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="form-group row">
-              <label className="col-sm-3 col-form-label">Apellidos Completos:</label>
-              <div className="col-sm-9">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="apellidos"
-                  value={formData.apellidos}
-                  onChange={handleInputChange}
-                />
+              <div className="form-group row">
+                <label className="col-sm-3 col-form-label">Apellidos Completos:</label>
+                <div className="col-sm-9">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="apellidos"
+                    value={formData.apellidos}
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="form-group row">
-              <label className="col-sm-3 col-form-label">Fecha de Nacimiento:</label>
-              <div className="col-sm-9">
-                <input
-                  type="date"
-                  className="form-control"
-                  name="fechaNacimiento"
-                  value={formData.fechaNacimiento}
-                  onChange={handleInputChange}
-                />
+              <div className="form-group row">
+                <label className="col-sm-3 col-form-label">Fecha de Nacimiento:</label>
+                <div className="col-sm-9">
+                  <input
+                    type="date"
+                    className="form-control"
+                    name="fechaNacimiento"
+                    value={formData.fechaNacimiento}
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="form-group row">
+              <div className="form-group row">
                 <label className="col-sm-3 col-form-label">Estatura (cm):</label>
                 <div className="col-sm-9">
                   <input
@@ -373,18 +386,18 @@ export default function Lista_paciente() {
                     onChange={handleInputChange}
                   />
                 </div>
-              </div>  
-          </form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleUpdateModalClose}>
-            Cerrar
-          </Button>
-          <Button variant="primary" onClick={handleGuardar}>
-            Actualizar
-          </Button>
-        </Modal.Footer>
-      </Modal>
+              </div>
+            </form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleUpdateModalClose}>
+              Cerrar
+            </Button>
+            <Button variant="primary" onClick={handleGuardar}>
+              Actualizar
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </Layout>
   );

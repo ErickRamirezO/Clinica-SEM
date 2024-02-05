@@ -10,12 +10,18 @@ import "./index.css";
 import Registro from "./routes/Registro/Registro";
 import MiPerfil from "./routes/Registro/MiPerfil";
 import Historial from "./routes/Historial/Historial";
+import Inicio from "./routes/Inicio/Inicio";
 
 
 //RUTAS
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <Inicio/>,
+    errorElement: <ErrorPage/>
+  },
+  {
+    path: "/login",
     element: <Login />,
     errorElement: <ErrorPage />,
   },
@@ -40,7 +46,7 @@ const router = createBrowserRouter([
     element: <MiPerfil />,
   },
   {
-    path: "/historial-paciente",
+    path: "/historial-paciente/:id",
     element: <Historial />,
   },
 

@@ -1,0 +1,207 @@
+body {
+    background-color: #061828;
+    height: 100%;
+}
+
+.btn-primary{
+    background-color: #2d5391;
+    border-color: #1d2f4c;
+}
+
+/*----------------------------------------------------------------------------------------------------------NAVAR*/
+/*letra de Navar*/
+
+.nav-link-custom {
+    color: white !important;
+    margin-right: 50px;
+}
+
+.colorNavar {
+    background-color: #061828;
+}
+
+/* efecto subrayado*/
+.nav-link-custom:hover {
+    color:  #4f7bbf  !important; 
+    border-bottom: 2px solid  #4f7bbf ; 
+}
+
+.nav-link-custom:not(:hover) {
+    border-bottom: none; 
+}
+
+/*-----------------------------------------------------------------------------------------------------------INFO Y SLIDER*/
+
+/*infotext*/
+
+.infoText h2{
+    color: aliceblue;
+    text-align: center;
+}
+
+.infoText p{
+    color:  #b4a37e;
+    text-align: justify;
+}
+
+/*infoImages*/
+
+.infoImage p {
+    color: black;
+    background-color: rgba(169, 169, 169, 0.5); 
+    padding: 10px; 
+    border-radius: 5px; 
+    backdrop-filter: blur(5px); 
+    border-radius: 30px;
+}
+
+
+.w-100{
+    border-radius: 50px;
+}
+
+.separator {
+    width: 10px; 
+    height: 10px; 
+    background-color: #b4a37e ; 
+    margin: 20px auto; 
+    border-radius: 50%; 
+}
+
+/*--------------------------------------------------------------------------------------------------------ESPECIALIDADES*/
+
+.especialidad img{
+    width: 100%;
+    height: 300px;
+    border-radius: 30px;
+
+}
+
+.especialidad{
+    margin-bottom: 20px; /* Ajusta el valor según el espaciado deseado entre las imágenes */
+}
+
+.especialidad {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.especialidad img {
+    width: 100%;
+    transition: filter 0.5s; 
+}
+
+.especialidad:hover img {
+    filter: blur(5px); 
+}
+
+.especialidad:hover::before {
+    border-radius: 50%;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(169, 169, 169, 0.5); 
+    backdrop-filter: blur(5px); 
+}
+
+.overlay h3{
+    font-weight: bold;
+    font-size: 20px;
+    color:  #061828 ;
+    text-shadow: 2px 2px 5px #b4a37e; /* Ajusta los valores según tu preferencia */
+
+}
+
+.overlay p{
+    text-shadow: 2px 2px 5px whitesmoke; /* Ajusta los valores según tu preferencia */
+    font-weight: bold;
+}
+
+.especialidad .overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    text-align: center;
+    transition: opacity 0.5s; /* Agrega una transición para mostrar y ocultar el texto */
+}
+
+.especialidad:hover .overlay {
+    opacity: 1; /* Muestra el texto al pasar el ratón */
+}
+
+
+/*----------------------------------------------------------------------------------------------------------FOOTER*/
+
+.logoFooter{
+    text-align: center;
+}
+.colorFooter{
+    background-color: #061828;
+}
+
+.logoFooter img{
+    width: 50%;
+}
+
+.infoFooter h4{
+    color: aliceblue;
+}
+
+.infoFooter p{
+    color: aliceblue;
+}
+/*------------------------------------------------------------------------------------------------------------MODAL*/
+
+.modal-content {
+    background-color: #061828; 
+    color: #fff; 
+}
+
+.modalImage img{
+    width: 100%;
+    height: 200px;
+    border-radius: 30px;
+}
+
+
+.modalDescription h3, p{
+    text-align: center;
+}
+
+/* Estilos para la imagen borrosa */
+.modalRow:hover .modalImage img {
+    filter: blur(5px); /* Ajusta el valor según la cantidad de desenfoque que desees */
+    transition: filter 0.5s ease; /* Añade una transición para suavizar el efecto */
+}
+
+/* Estilos para mostrar el texto */
+.modalInfo {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+}
+
+.modalRow:hover .modalInfo {
+    display: block;
+}
+
+.ubi{
+    color: azure;
+}
+
+.ubi:hover{
+    color: azure;
+    text-decoration: none;
+}
+
+/* Fin del archivo */

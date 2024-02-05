@@ -1,3 +1,4 @@
+// Historial.jsx
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./historial.css";
@@ -117,25 +118,7 @@ export default function Historial() {
                                         <i className="fas fa-heart"></i>
                                     </td>
                                     <td className="columnaAntecedentes">
-                                        HISTORIAL CLINICO:
-                                        {paciente?.historialClinico.map((historia) => (
-                                            <div key={historia.fecha}>
-                                                <p className="center">
-                                                    <i className="fas fa-heart columnIco "></i>
-                                                    <input type="date" className="medio" />
-                                                </p>
-                                                <div className="IzqInformacion historialCom">
-                                                    <p>Doctor {historia.doctor}</p>
-                                                    <p>Diagnóstico: {historia.diagnostico}</p>
-                                                    <p>Receta médica:</p>
-                                                    <ul>
-                                                        {historia.receta.map((medicamento, index) => (
-                                                            <li key={index}>{medicamento}</li>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        ))}
+                                       
                                     </td>
                                 </tr>
                             </table>
