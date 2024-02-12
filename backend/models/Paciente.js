@@ -7,7 +7,7 @@ const pacienteSchema = new Schema({
     apellidos: String,
     fechaNacimiento: Date,
     estatura: Number,
-    cedula: Number,
+    cedula: String,
     telefono: Number,
     peso: Number,
 }, { collection: 'Pacientes' }); 

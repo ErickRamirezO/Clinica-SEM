@@ -4,100 +4,9 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-}
-
-/* Barra superior */
-.TopBar {
-  background: -webkit-linear-gradient(to right, #5B86E5, #36D1DC);
-  background: linear-gradient(to right, #5B86E5, #36D1DC);
-  color: #fff;
+  background-color: white;
   width: 100%;
-  height: 10%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 0 20px;
-}
-
-/*Logo*/
-.logo {
-  margin-right: auto; /* Alinea el logo a la derecha */
-}
-
-.logo img {
-  width: 150px; /* Ajusta el ancho según tus necesidades */
-  height: auto; /* Mantiene la proporción de la imagen */
-}
-
-/* Barra de búsqueda */
-.SearchContainer {
-  display: flex;
-  align-items: center;
-}
-
-input {
-  width: 200px;
   height: 100%;
-  margin-right: 20px;
-  border: none;
-  border-radius: 5px;
-  padding: 10px;
-  background-color: transparent;
-  border: 2px solid #5B86E5;
-  color: white;
-}
-
-.fa-search {
-  color: black;
-}
-
-input::placeholder {
-  color: black;
-}
-
-/* Contenedor barra lateral y contenido */
-.ContainerSide {
-  display: flex;
-  height:100%;
-}
-
-/* Barra lateral izquierda */
-.SideBar {
-  background: -webkit-linear-gradient(to bottom, #5B86E5, #36D1DC);
-  background: linear-gradient(to bottom, #5B86E5, #36D1DC);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 20px;
-  width: 5%;
-  height: 100%;
-}
-
-.SideBarItem {
-  margin-bottom: 50px;
-  cursor: pointer;
-}
-
-.SideBarItem:last-child {
-  margin-top: auto;
-}
-
-.SideBarItem:hover::before {
-  content: attr(title);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 5px;
-  color: #fff;
-  border-radius: 5px;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.SideBarItem:hover::before {
-  opacity: 1;
 }
 
 /*Contenido*/
@@ -105,11 +14,11 @@ input::placeholder {
   width:100%;
   flex: 1;
   padding: 20px;
-  background-color: #f0f0f0;
+  background-color:  #1d2f4c ;
 }
 
 h2 {
-  color: #333;
+  color: white;
 }
 
 .tabla_pacientes {
@@ -122,10 +31,11 @@ h2 {
   padding: 12px;
   text-align: center; /* Centra el contenido en las celdas */
   border-bottom: 1px solid #ddd;
+  color:  white;
 }
 
 .tabla_pacientes th {
-  background-color: #1CA1D6;
+  background-color: #184690 ;
   color: white;
 }
 
@@ -155,12 +65,12 @@ button {
 
 #btn1{
   background-color: limegreen;
-  color: black;
+  color: white;
 }
 
 #btnAddPaciente, #btnActualizarHistorial{
   background-color: #5B86E5;
-  color: black;
+  color: white;
 }
 
 .tabla_pacientes button:hover {

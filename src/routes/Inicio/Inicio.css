@@ -40,7 +40,7 @@ body {
 }
 
 .infoText p{
-    color:  #b4a37e;
+    color:  #ffffff;
     text-align: justify;
 }
 
@@ -174,13 +174,12 @@ body {
     text-align: center;
 }
 
-/* Estilos para la imagen borrosa */
+
 .modalRow:hover .modalImage img {
-    filter: blur(5px); /* Ajusta el valor según la cantidad de desenfoque que desees */
-    transition: filter 0.5s ease; /* Añade una transición para suavizar el efecto */
+    filter: blur(5px); 
+    transition: filter 0.5s ease; 
 }
 
-/* Estilos para mostrar el texto */
 .modalInfo {
     display: none;
     position: absolute;

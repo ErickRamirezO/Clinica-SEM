@@ -32,6 +32,9 @@ export default function HomePage() {
                 </Navbar.Collapse>
             </Navbar>
 
+            {/* Aqui implementa lo que te pedi */}
+            
+            {/* ----------------------------------- */}
 
             {/* Sección de información y slider */}
             <div className="info container mt-4">

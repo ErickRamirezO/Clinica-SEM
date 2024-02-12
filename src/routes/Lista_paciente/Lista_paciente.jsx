@@ -3,6 +3,14 @@ import { Modal, Button } from "react-bootstrap";
 import "./Lista_paciente.css";
 import Layout from "../../components/Navbar/Navbar";
 import { Link } from "react-router-dom";
+import {
+  validarNombresCompletos,
+  validarApellidosCompletos,
+  validarEstatura,
+  validarCedulaEcuatoriana,
+  validarNumeroTelefonico,
+  validarPeso,
+} from "../../validate";
 
 export default function Lista_paciente() {
   const [showModal, setShowModal] = useState(false);
@@ -13,7 +21,7 @@ export default function Lista_paciente() {
     apellidos: "",
     fechaNacimiento: "",
     estatura: 0,
-    cedula: 0,
+    cedula: "",
     telefono: 0,
     peso: 0,
   });
@@ -21,6 +29,22 @@ export default function Lista_paciente() {
   const [pacientes, setPacientes] = useState([]);
   const [selectedPaciente, setSelectedPaciente] = useState(null);
   const [mensajeError, setMensajeError] = useState("");
+  const [errorNombres, setErrorNombres] = useState("");
+  const [errorApellidos, setErrorApellidos] = useState("");
+  const [errorEstatura, setErrorEstatura] = useState("");
+  const [errorCedula, setErrorCedula] = useState("");
+  const [errorTelefono, setErrorTelefono] = useState("");
+  const [errorPeso, setErrorPeso] = useState("");
+
+  const resetErrors = () => {
+    setErrorNombres("");
+    setErrorApellidos("");
+    setErrorEstatura("");
+    setErrorCedula("");
+    setErrorTelefono("");
+    setErrorPeso("");
+    setMensajeError("");
+  };
 
   const handleModalOpen = () => {
     setShowModal(true);
@@ -28,26 +52,17 @@ export default function Lista_paciente() {
 
   const handleModalClose = () => {
     setShowModal(false);
-    setFormData({
-      fechaCreacion: new Date().toLocaleDateString(),
-      nombres: "",
-      apellidos: "",
-      fechaNacimiento: "",
-      estatura: 0,
-      cedula: 0,
-      telefono: 0,
-      peso: 0,
-    });
+    resetFormData();
     setMensajeError("");
+    resetErrors();
   };
 
-  // Función para abrir el modal de actualización y llenar el formulario con los datos actuales del paciente
   const handleUpdateModalOpen = (paciente) => {
     setShowUpdateModal(true);
     setSelectedPaciente(paciente);
     setFormData({
-      fechaCreacion: new Date().toLocaleDateString(),
-      ...paciente, // Llena el formulario con los datos del paciente seleccionado
+      ...paciente,
+      fechaNacimiento: new Date(paciente.fechaNacimiento).toISOString().split('T')[0],
     });
     setMensajeError("");
   };
@@ -55,17 +70,9 @@ export default function Lista_paciente() {
   const handleUpdateModalClose = () => {
     setShowUpdateModal(false);
     setSelectedPaciente(null);
-    setFormData({
-      fechaCreacion: new Date().toLocaleDateString(),
-      nombres: "",
-      apellidos: "",
-      fechaNacimiento: "",
-      estatura: 0,
-      cedula: 0,
-      telefono: 0,
-      peso: 0,
-    });
+    resetFormData();
     setMensajeError("");
+    resetErrors();
   };
 
   const handleInputChange = (e) => {
@@ -75,20 +82,35 @@ export default function Lista_paciente() {
     });
   };
 
-  const handleGuardar = async () => {
+  const handleGuardarUpdate = async () => {
     try {
-      // Verificar si el paciente ya existe
-      const pacienteExistente = pacientes.find(
-        (paciente) =>
-          paciente.nombres === formData.nombres &&
-          paciente.apellidos === formData.apellidos
-      );
+      // Validar todos los campos
+      const validNombres = validarNombresCompletos(formData.nombres);
+      const validApellidos = validarApellidosCompletos(formData.apellidos);
+      const validEstatura = validarEstatura(formData.estatura);
+      const validCedula = validarCedulaEcuatoriana(formData.cedula);
+      const validTelefono = validarNumeroTelefonico(formData.telefono);
+      const validPeso = validarPeso(formData.peso);
 
-      if (pacienteExistente) {
-        setMensajeError("¡Usuario existente!");
+      // Verificar si hay algún error
+      if (
+        !validNombres ||
+        !validApellidos ||
+        !validEstatura ||
+        !validCedula ||
+        !validTelefono ||
+        !validPeso
+      ) {
+        // Mostrar todos los mensajes de error al mismo tiempo
+        setErrorNombres(validNombres ? "" : "Por favor ingresa nombres válidos.");
+        setErrorApellidos(validApellidos ? "" : "Por favor ingresa apellidos válidos.");
+        setErrorEstatura(validEstatura ? "" : "Por favor ingresa una estatura válida.");
+        setErrorCedula(validCedula ? "" : "Por favor ingresa una cédula ecuatoriana válida.");
+        setErrorTelefono(validTelefono ? "" : "Por favor ingresa un número telefónico válido.");
+        setErrorPeso(validPeso ? "" : "Por favor ingresa un peso válido.");
         return;
       }
-      
+
       const endpoint = selectedPaciente
         ? `http://localhost:3001/auth/actualizar-paciente/${selectedPaciente._id}`
         : "http://localhost:3001/auth/registro-paciente";
@@ -100,7 +122,9 @@ export default function Lista_paciente() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+        }),
       });
 
       if (response.ok) {
@@ -110,6 +134,7 @@ export default function Lista_paciente() {
             : "Paciente guardado exitosamente"
         );
         fetchPacientes();
+        resetFormData();
         setMensajeError("");
         handleModalClose();
         handleUpdateModalClose();
@@ -120,6 +145,80 @@ export default function Lista_paciente() {
       console.error("Error de red", error);
     }
   };
+
+  const handleGuardar = async () => {
+    try {
+      // Validar todos los campos
+      const validNombres = validarNombresCompletos(formData.nombres);
+      const validApellidos = validarApellidosCompletos(formData.apellidos);
+      const validEstatura = validarEstatura(formData.estatura);
+      const validCedula = validarCedulaEcuatoriana(formData.cedula);
+      const validTelefono = validarNumeroTelefonico(formData.telefono);
+      const validPeso = validarPeso(formData.peso);
+
+      // Verificar si hay algún error
+      if (
+        !validNombres ||
+        !validApellidos ||
+        !validEstatura ||
+        !validCedula ||
+        !validTelefono ||
+        !validPeso
+      ) {
+        // Mostrar todos los mensajes de error al mismo tiempo
+        setErrorNombres(validNombres ? "" : "Por favor ingresa nombres válidos.");
+        setErrorApellidos(validApellidos ? "" : "Por favor ingresa apellidos válidos.");
+        setErrorEstatura(validEstatura ? "" : "Por favor ingresa una estatura válida.");
+        setErrorCedula(validCedula ? "" : "Por favor ingresa una cédula ecuatoriana válida.");
+        setErrorTelefono(validTelefono ? "" : "Por favor ingresa un número telefónico válido.");
+        setErrorPeso(validPeso ? "" : "Por favor ingresa un peso válido.");
+        return;
+      }
+
+      // Verificar si el paciente ya está registrado
+      const pacienteExistente = pacientes.find(paciente => paciente.cedula === formData.cedula);
+      if (pacienteExistente) {
+        setMensajeError("Este paciente ya se encuentra registrado");
+        return;
+      }
+
+      const endpoint = selectedPaciente
+        ? `http://localhost:3001/auth/actualizar-paciente/${selectedPaciente._id}`
+        : "http://localhost:3001/auth/registro-paciente";
+
+      const method = selectedPaciente ? "PUT" : "POST";
+
+      const response = await fetch(endpoint, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          fechaNacimiento: new Date(formData.fechaNacimiento).toISOString().split('T')[0],
+        }),
+      });
+
+      if (response.ok) {
+        console.log(
+          selectedPaciente
+            ? "Paciente actualizado exitosamente"
+            : "Paciente guardado exitosamente"
+        );
+        fetchPacientes();
+        resetFormData();
+        setMensajeError("");
+        handleModalClose();
+        handleUpdateModalClose();
+      } else {
+        console.error("Error al guardar o actualizar el paciente");
+      }
+    } catch (error) {
+      console.error("Error de red", error);
+    }
+  };
+
+
   const fetchPacientes = async () => {
     try {
       const response = await fetch("http://localhost:3001/auth/lista-pacientes");
@@ -133,6 +232,19 @@ export default function Lista_paciente() {
     } catch (error) {
       console.error("Error de red", error);
     }
+  };
+
+  const resetFormData = () => {
+    setFormData({
+      fechaCreacion: new Date().toLocaleDateString(),
+      nombres: "",
+      apellidos: "",
+      fechaNacimiento: "",
+      estatura: 0,
+      cedula: "",
+      telefono: 0,
+      peso: 0,
+    });
   };
 
   useEffect(() => {
@@ -161,7 +273,7 @@ export default function Lista_paciente() {
                 {pacientes.map((paciente) => (
                   <tr key={paciente._id}>
                     <td>{`${paciente.nombres} ${paciente.apellidos}`}</td>
-                    <td><p>{new Date().toLocaleDateString()}</p></td>
+                    <td>{new Date(paciente.fechaCreacion).toLocaleDateString()}</td>
                     <td><p>Paciente resgistrado</p></td>
                     <td>
                       <Link to={`/historial-paciente/${paciente._id}`}>
@@ -178,6 +290,7 @@ export default function Lista_paciente() {
           </div>
         </div>
 
+        {/* Modal registrar paciente */}
         <Modal show={showModal} onHide={handleModalClose} size="lg">
           <Modal.Header closeButton>
             <Modal.Title>Crear Historia Clínica</Modal.Title>
@@ -198,7 +311,11 @@ export default function Lista_paciente() {
                     name="nombres"
                     value={formData.nombres}
                     onChange={handleInputChange}
+                    placeholder="nombre1 nombre2"
                   />
+                  {errorNombres && !validarNombresCompletos(formData.nombres) && (
+                    <p style={{ color: "red" }}>Formato de nombres incorrecto</p>
+                  )}
                 </div>
               </div>
               <div className="form-group row">
@@ -212,7 +329,11 @@ export default function Lista_paciente() {
                     name="apellidos"
                     value={formData.apellidos}
                     onChange={handleInputChange}
+                    placeholder="apellido1 apellido2"
                   />
+                  {errorApellidos && !validarApellidosCompletos(formData.apellidos) && (
+                    <p style={{ color: "red" }}>Formato de apellidos incorrecto</p>
+                  )}
                 </div>
               </div>
               <div className="form-group row">
@@ -230,7 +351,7 @@ export default function Lista_paciente() {
                 </div>
               </div>
               <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Estatura (cm):</label>
+                <label className="col-sm-3 col-form-label">Estatura (m):</label>
                 <div className="col-sm-9">
                   <input
                     type="number"
@@ -238,19 +359,27 @@ export default function Lista_paciente() {
                     name="estatura"
                     value={formData.estatura}
                     onChange={handleInputChange}
+                    placeholder="0.3 - 3.00"
                   />
+                  {errorEstatura && !validarEstatura(formData.estatura) && (
+                    <p style={{ color: "red" }}>Estatura no válida</p>
+                  )}
                 </div>
               </div>
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">Cédula:</label>
                 <div className="col-sm-9">
                   <input
-                    type="number"
+                    type="text" // Cambiar a tipo texto
                     className="form-control"
                     name="cedula"
                     value={formData.cedula}
                     onChange={handleInputChange}
+                    placeholder="0400911899"
                   />
+                  {errorCedula && !validarCedulaEcuatoriana(formData.cedula) && (
+                    <p style={{ color: "red" }}>Cédula incorrecta</p>
+                  )}
                 </div>
               </div>
               <div className="form-group row">
@@ -264,7 +393,11 @@ export default function Lista_paciente() {
                     name="telefono"
                     value={formData.telefono}
                     onChange={handleInputChange}
+                    placeholder="0981515127"
                   />
+                  {errorTelefono && !validarNumeroTelefonico(formData.telefono) && (
+                    <p style={{ color: "red" }}>Número telefónico incorrecto</p>
+                  )}
                 </div>
               </div>
               <div className="form-group row">
@@ -276,7 +409,11 @@ export default function Lista_paciente() {
                     name="peso"
                     value={formData.peso}
                     onChange={handleInputChange}
+                    placeholder="4 - 300"
                   />
+                  {errorPeso && !validarPeso(formData.peso) && (
+                    <p style={{ color: "red" }}>Ingrese un peso válido</p>
+                  )}
                 </div>
               </div>
             </form>
@@ -289,12 +426,16 @@ export default function Lista_paciente() {
               Guardar
             </Button>
           </Modal.Footer>
-          <center><p className="ErrorPacienteExistente">{mensajeError && (
-            <p style={{ color: "red", marginTop: "10px" }}>{mensajeError}</p>
-          )}</p></center>
+          <center>
+            <p className="ErrorPacienteExistente">
+              {mensajeError && (
+                <p style={{ color: "red", marginTop: "10px" }}>{mensajeError}</p>
+              )}
+            </p>
+          </center>
         </Modal>
 
-
+        {/* Modal actualizar paciente */}
         <Modal show={showUpdateModal} onHide={handleUpdateModalClose} size="lg">
           <Modal.Header closeButton>
             <Modal.Title>Actualizar Historia Clínica</Modal.Title>
@@ -309,7 +450,7 @@ export default function Lista_paciente() {
                     className="form-control"
                     name="nombres"
                     value={formData.nombres}
-                    onChange={handleInputChange}
+                    readOnly
                   />
                 </div>
               </div>
@@ -321,7 +462,7 @@ export default function Lista_paciente() {
                     className="form-control"
                     name="apellidos"
                     value={formData.apellidos}
-                    onChange={handleInputChange}
+                    readOnly
                   />
                 </div>
               </div>
@@ -333,7 +474,7 @@ export default function Lista_paciente() {
                     className="form-control"
                     name="fechaNacimiento"
                     value={formData.fechaNacimiento}
-                    onChange={handleInputChange}
+                    readOnly
                   />
                 </div>
               </div>
@@ -347,17 +488,20 @@ export default function Lista_paciente() {
                     value={formData.estatura}
                     onChange={handleInputChange}
                   />
+                  {errorEstatura && !validarEstatura(formData.estatura) && (
+                    <p style={{ color: "red" }}>Estatura no válida</p>
+                  )}
                 </div>
               </div>
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">Cédula:</label>
                 <div className="col-sm-9">
                   <input
-                    type="number"
+                    type="text"
                     className="form-control"
                     name="cedula"
                     value={formData.cedula}
-                    onChange={handleInputChange}
+                    readOnly
                   />
                 </div>
               </div>
@@ -373,6 +517,9 @@ export default function Lista_paciente() {
                     value={formData.telefono}
                     onChange={handleInputChange}
                   />
+                  {errorTelefono && !validarNumeroTelefonico(formData.telefono) && (
+                    <p style={{ color: "red" }}>Número telefónico incorrecto</p>
+                  )}
                 </div>
               </div>
               <div className="form-group row">
@@ -385,6 +532,9 @@ export default function Lista_paciente() {
                     value={formData.peso}
                     onChange={handleInputChange}
                   />
+                  {errorPeso && !validarPeso(formData.peso) && (
+                    <p style={{ color: "red" }}>Ingrese un peso válido</p>
+                  )}
                 </div>
               </div>
             </form>
@@ -393,7 +543,7 @@ export default function Lista_paciente() {
             <Button variant="secondary" onClick={handleUpdateModalClose}>
               Cerrar
             </Button>
-            <Button variant="primary" onClick={handleGuardar}>
+            <Button variant="primary" onClick={handleGuardarUpdate}>
               Actualizar
             </Button>
           </Modal.Footer>
@@ -401,5 +551,4 @@ export default function Lista_paciente() {
       </div>
     </Layout>
   );
-
 }
