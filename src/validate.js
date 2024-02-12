@@ -1,16 +1,17 @@
 // validate.js
 
 export function validarNombresCompletos(nombres) {
-    // Expresión regular para validar nombres y apellidos
-    var regex = /^[a-zA-Z]+\s[a-zA-Z]+$/;
+    // Expresión regular para validar nombres y apellidos con letras acentuadas, "ñ" y espacio opcional al final
+    var regex = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+\s[a-zA-ZñÑáéíóúÁÉÍÓÚ]+(\s)?$/;
     return regex.test(nombres);
 }
 
 export function validarApellidosCompletos(apellidos) {
-    // Expresión regular para validar nombres y apellidos
-    var regex = /^[a-zA-Z]+\s[a-zA-Z]+$/;
+    // Expresión regular para validar nombres y apellidos con letras acentuadas, "ñ" y espacio opcional al final
+    var regex = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+\s[a-zA-ZñÑáéíóúÁÉÍÓÚ]+(\s)?$/;
     return regex.test(apellidos);
 }
+
 
 export function validarEstatura(estatura) {
     // Verificar si la estatura está dentro del rango válido (0.30 - 3.00)

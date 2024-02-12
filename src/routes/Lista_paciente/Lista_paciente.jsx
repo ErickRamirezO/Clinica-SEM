@@ -22,7 +22,7 @@ export default function Lista_paciente() {
     fechaNacimiento: "",
     estatura: 0,
     cedula: "",
-    telefono: 0,
+    telefono: "",
     peso: 0,
   });
 
@@ -35,6 +35,20 @@ export default function Lista_paciente() {
   const [errorCedula, setErrorCedula] = useState("");
   const [errorTelefono, setErrorTelefono] = useState("");
   const [errorPeso, setErrorPeso] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Manejador de evento para actualizar el término de búsqueda
+  const handleSearchTermChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Filtrar la lista de pacientes según el término de búsqueda
+  const filteredPacientes = pacientes.filter((paciente) => {
+    return (
+      paciente.nombres.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      paciente.apellidos.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
 
   const resetErrors = () => {
     setErrorNombres("");
@@ -242,7 +256,7 @@ export default function Lista_paciente() {
       fechaNacimiento: "",
       estatura: 0,
       cedula: "",
-      telefono: 0,
+      telefono: "",
       peso: 0,
     });
   };
@@ -257,9 +271,20 @@ export default function Lista_paciente() {
         <div className="ContainerSide">
           <div className="Contenido">
             <h2 style={{ textAlign: "center" }}>Lista de pacientes</h2>
-            <button id="btnAddPaciente" onClick={handleModalOpen}>
-              Añadir paciente
-            </button>
+            <div className="buscador d-flex justify-content-between align-items-center">
+              <button id="btnAddPaciente" onClick={handleModalOpen}>
+                Añadir paciente
+              </button>
+              {/* Barra de búsqueda */}
+              <input
+                className="barraBusqueda"
+                type="text"
+                placeholder="     Buscar pacientes..."
+                value={searchTerm}
+                onChange={handleSearchTermChange}
+              />
+            </div>
+
             <table className="tabla_pacientes">
               <thead>
                 <tr>
@@ -270,17 +295,18 @@ export default function Lista_paciente() {
                 </tr>
               </thead>
               <tbody>
-                {pacientes.map((paciente) => (
+                {/* Mostrar pacientes filtrados */}
+                {filteredPacientes.map((paciente) => (
                   <tr key={paciente._id}>
                     <td>{`${paciente.nombres} ${paciente.apellidos}`}</td>
                     <td>{new Date(paciente.fechaCreacion).toLocaleDateString()}</td>
                     <td><p>Paciente resgistrado</p></td>
                     <td>
                       <Link to={`/historial-paciente/${paciente._id}`}>
-                        <button id="btn1">Ver Historias Clínicas</button>
+                        <button id="btn1">Ver Paciente</button>
                       </Link>
                       <button id="btnActualizarHistorial" onClick={() => handleUpdateModalOpen(paciente)}>
-                        Actualizar Historia Clínica
+                        Actualizar
                       </button>
                     </td>
                   </tr>
@@ -292,9 +318,10 @@ export default function Lista_paciente() {
 
         {/* Modal registrar paciente */}
         <Modal show={showModal} onHide={handleModalClose} size="lg">
-          <Modal.Header closeButton>
-            <Modal.Title>Crear Historia Clínica</Modal.Title>
+          <Modal.Header>
+            <Modal.Title className="text-center mx-auto">Ingreso de datos</Modal.Title>
           </Modal.Header>
+
           <Modal.Body>
             <div style={{ textAlign: "right", marginBottom: "20px" }}>
               <p name="fechaCreacion">{new Date().toLocaleDateString()}</p>
@@ -314,7 +341,7 @@ export default function Lista_paciente() {
                     placeholder="nombre1 nombre2"
                   />
                   {errorNombres && !validarNombresCompletos(formData.nombres) && (
-                    <p style={{ color: "red" }}>Formato de nombres incorrecto</p>
+                    <p className="pError">Formato de nombres incorrecto</p>
                   )}
                 </div>
               </div>
@@ -332,7 +359,7 @@ export default function Lista_paciente() {
                     placeholder="apellido1 apellido2"
                   />
                   {errorApellidos && !validarApellidosCompletos(formData.apellidos) && (
-                    <p style={{ color: "red" }}>Formato de apellidos incorrecto</p>
+                    <p className="pError">Formato de apellidos incorrecto</p>
                   )}
                 </div>
               </div>
@@ -362,7 +389,7 @@ export default function Lista_paciente() {
                     placeholder="0.3 - 3.00"
                   />
                   {errorEstatura && !validarEstatura(formData.estatura) && (
-                    <p style={{ color: "red" }}>Estatura no válida</p>
+                    <p className="pError">Estatura no válida</p>
                   )}
                 </div>
               </div>
@@ -378,7 +405,7 @@ export default function Lista_paciente() {
                     placeholder="0400911899"
                   />
                   {errorCedula && !validarCedulaEcuatoriana(formData.cedula) && (
-                    <p style={{ color: "red" }}>Cédula incorrecta</p>
+                    <p className="pError">Cédula incorrecta</p>
                   )}
                 </div>
               </div>
@@ -388,7 +415,7 @@ export default function Lista_paciente() {
                 </label>
                 <div className="col-sm-9">
                   <input
-                    type="number"
+                    type="text"
                     className="form-control"
                     name="telefono"
                     value={formData.telefono}
@@ -396,7 +423,7 @@ export default function Lista_paciente() {
                     placeholder="0981515127"
                   />
                   {errorTelefono && !validarNumeroTelefonico(formData.telefono) && (
-                    <p style={{ color: "red" }}>Número telefónico incorrecto</p>
+                    <p className="pError">Número telefónico incorrecto</p>
                   )}
                 </div>
               </div>
@@ -412,7 +439,7 @@ export default function Lista_paciente() {
                     placeholder="4 - 300"
                   />
                   {errorPeso && !validarPeso(formData.peso) && (
-                    <p style={{ color: "red" }}>Ingrese un peso válido</p>
+                    <p className="pError">Ingrese un peso válido</p>
                   )}
                 </div>
               </div>
@@ -437,9 +464,10 @@ export default function Lista_paciente() {
 
         {/* Modal actualizar paciente */}
         <Modal show={showUpdateModal} onHide={handleUpdateModalClose} size="lg">
-          <Modal.Header closeButton>
-            <Modal.Title>Actualizar Historia Clínica</Modal.Title>
+          <Modal.Header>
+            <Modal.Title className="text-center mx-auto">Actualización de datos</Modal.Title>
           </Modal.Header>
+
           <Modal.Body>
             <form>
               <div className="form-group row">
@@ -489,7 +517,7 @@ export default function Lista_paciente() {
                     onChange={handleInputChange}
                   />
                   {errorEstatura && !validarEstatura(formData.estatura) && (
-                    <p style={{ color: "red" }}>Estatura no válida</p>
+                    <p className="pError">Estatura no válida</p>
                   )}
                 </div>
               </div>
@@ -511,14 +539,14 @@ export default function Lista_paciente() {
                 </label>
                 <div className="col-sm-9">
                   <input
-                    type="number"
+                    type="text"
                     className="form-control"
                     name="telefono"
                     value={formData.telefono}
                     onChange={handleInputChange}
                   />
                   {errorTelefono && !validarNumeroTelefonico(formData.telefono) && (
-                    <p style={{ color: "red" }}>Número telefónico incorrecto</p>
+                    <p className="pError">Número telefónico incorrecto</p>
                   )}
                 </div>
               </div>
@@ -533,7 +561,7 @@ export default function Lista_paciente() {
                     onChange={handleInputChange}
                   />
                   {errorPeso && !validarPeso(formData.peso) && (
-                    <p style={{ color: "red" }}>Ingrese un peso válido</p>
+                    <p className="pError">Ingrese un peso válido</p>
                   )}
                 </div>
               </div>
