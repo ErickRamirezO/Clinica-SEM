@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button } from "react-bootstrap";
 import "./Lista_paciente.css";
 import Layout from "../../components/Navbar/Navbar";
 import { Link } from "react-router-dom";
@@ -11,6 +10,8 @@ import {
   validarNumeroTelefonico,
   validarPeso,
 } from "../../validate";
+import ModalRegistro from "./ModalRegistro";
+import ModalUpdate from "./ModalUpdate";
 
 export default function Lista_paciente() {
   const [showModal, setShowModal] = useState(false);
@@ -36,6 +37,8 @@ export default function Lista_paciente() {
   const [errorTelefono, setErrorTelefono] = useState("");
   const [errorPeso, setErrorPeso] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
 
   // Manejador de evento para actualizar el término de búsqueda
   const handleSearchTermChange = (e) => {
@@ -49,6 +52,14 @@ export default function Lista_paciente() {
       paciente.apellidos.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
+
+  // Calcular índices del primer y último elemento de la página actual
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentPacientes = filteredPacientes
+    .slice(indexOfFirstItem, indexOfLastItem)
+    .sort((a, b) => a._id - b._id); // Ordenar por ID de manera descendente
+
 
   const resetErrors = () => {
     setErrorNombres("");
@@ -265,6 +276,10 @@ export default function Lista_paciente() {
     fetchPacientes();
   }, []);
 
+  // Cambiar de página
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
   return (
     <Layout>
       <div className="listaP">
@@ -289,20 +304,20 @@ export default function Lista_paciente() {
               <thead>
                 <tr>
                   <th>Nombres y Apellidos</th>
-                  <th>Fecha y última historial clínico</th>
+                  <th>Fecha de creación</th>
                   <th>Diagnóstico</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {/* Mostrar pacientes filtrados */}
-                {filteredPacientes.map((paciente) => (
+                {currentPacientes.map((paciente) => (
                   <tr key={paciente._id}>
                     <td>{`${paciente.nombres} ${paciente.apellidos}`}</td>
-                    <td>{new Date(paciente.fechaCreacion).toLocaleDateString()}</td>
+                    <td>{`${paciente.fechaCreacion}`}</td>
                     <td><p>Paciente resgistrado</p></td>
                     <td>
-                      <Link to={`/historial-paciente/${paciente._id}`}>
+                      <Link to={`/dato/${paciente._id}`}>
                         <button id="btn1">Ver Paciente</button>
                       </Link>
                       <button id="btnActualizarHistorial" onClick={() => handleUpdateModalOpen(paciente)}>
@@ -313,269 +328,67 @@ export default function Lista_paciente() {
                 ))}
               </tbody>
             </table>
+            {/* Paginación */}
+            {filteredPacientes.length > itemsPerPage && (
+              <div className="pagination">
+                <button
+                  className="btnAtras"
+                  onClick={() => paginate(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
+                <button
+                  className="btnSiguiente"
+                  onClick={() => paginate(currentPage + 1)}
+                  disabled={
+                    currentPage === Math.ceil(filteredPacientes.length / itemsPerPage)
+                  }
+                >
+                  Next
+                </button>
+              </div>
+            )}
+
           </div>
         </div>
 
         {/* Modal registrar paciente */}
-        <Modal show={showModal} onHide={handleModalClose} size="lg">
-          <Modal.Header>
-            <Modal.Title className="text-center mx-auto">Ingreso de datos</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <div style={{ textAlign: "right", marginBottom: "20px" }}>
-              <p name="fechaCreacion">{new Date().toLocaleDateString()}</p>
-            </div>
-            <form>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">
-                  Nombres Completos:
-                </label>
-                <div className="col-sm-9">
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="nombres"
-                    value={formData.nombres}
-                    onChange={handleInputChange}
-                    placeholder="nombre1 nombre2"
-                  />
-                  {errorNombres && !validarNombresCompletos(formData.nombres) && (
-                    <p className="pError">Formato de nombres incorrecto</p>
-                  )}
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">
-                  Apellidos Completos:
-                </label>
-                <div className="col-sm-9">
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="apellidos"
-                    value={formData.apellidos}
-                    onChange={handleInputChange}
-                    placeholder="apellido1 apellido2"
-                  />
-                  {errorApellidos && !validarApellidosCompletos(formData.apellidos) && (
-                    <p className="pError">Formato de apellidos incorrecto</p>
-                  )}
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">
-                  Fecha de Nacimiento:
-                </label>
-                <div className="col-sm-9">
-                  <input
-                    type="date"
-                    className="form-control"
-                    name="fechaNacimiento"
-                    value={formData.fechaNacimiento}
-                    onChange={handleInputChange}
-                  />
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Estatura (m):</label>
-                <div className="col-sm-9">
-                  <input
-                    type="number"
-                    className="form-control"
-                    name="estatura"
-                    value={formData.estatura}
-                    onChange={handleInputChange}
-                    placeholder="0.3 - 3.00"
-                  />
-                  {errorEstatura && !validarEstatura(formData.estatura) && (
-                    <p className="pError">Estatura no válida</p>
-                  )}
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Cédula:</label>
-                <div className="col-sm-9">
-                  <input
-                    type="text" // Cambiar a tipo texto
-                    className="form-control"
-                    name="cedula"
-                    value={formData.cedula}
-                    onChange={handleInputChange}
-                    placeholder="0400911899"
-                  />
-                  {errorCedula && !validarCedulaEcuatoriana(formData.cedula) && (
-                    <p className="pError">Cédula incorrecta</p>
-                  )}
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">
-                  Número Telefónico:
-                </label>
-                <div className="col-sm-9">
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="telefono"
-                    value={formData.telefono}
-                    onChange={handleInputChange}
-                    placeholder="0981515127"
-                  />
-                  {errorTelefono && !validarNumeroTelefonico(formData.telefono) && (
-                    <p className="pError">Número telefónico incorrecto</p>
-                  )}
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Peso (kg):</label>
-                <div className="col-sm-9">
-                  <input
-                    type="number"
-                    className="form-control"
-                    name="peso"
-                    value={formData.peso}
-                    onChange={handleInputChange}
-                    placeholder="4 - 300"
-                  />
-                  {errorPeso && !validarPeso(formData.peso) && (
-                    <p className="pError">Ingrese un peso válido</p>
-                  )}
-                </div>
-              </div>
-            </form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleModalClose}>
-              Cerrar
-            </Button>
-            <Button variant="primary" onClick={handleGuardar}>
-              Guardar
-            </Button>
-          </Modal.Footer>
-          <center>
-            <p className="ErrorPacienteExistente">
-              {mensajeError && (
-                <p style={{ color: "red", marginTop: "10px" }}>{mensajeError}</p>
-              )}
-            </p>
-          </center>
-        </Modal>
+        <ModalRegistro
+          showModal={showModal}
+          handleModalClose={handleModalClose}
+          formData={formData}
+          handleInputChange={handleInputChange}
+          errorNombres={errorNombres}
+          errorApellidos={errorApellidos}
+          errorEstatura={errorEstatura}
+          errorCedula={errorCedula}
+          errorTelefono={errorTelefono}
+          errorPeso={errorPeso}
+          validarNombresCompletos={validarNombresCompletos}
+          validarApellidosCompletos={validarApellidosCompletos}
+          validarEstatura={validarEstatura}
+          validarCedulaEcuatoriana={validarCedulaEcuatoriana}
+          validarNumeroTelefonico={validarNumeroTelefonico}
+          validarPeso={validarPeso}
+          handleGuardar={handleGuardar}
+          mensajeError={mensajeError}
+        />
 
         {/* Modal actualizar paciente */}
-        <Modal show={showUpdateModal} onHide={handleUpdateModalClose} size="lg">
-          <Modal.Header>
-            <Modal.Title className="text-center mx-auto">Actualización de datos</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <form>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Nombres Completos:</label>
-                <div className="col-sm-9">
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="nombres"
-                    value={formData.nombres}
-                    readOnly
-                  />
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Apellidos Completos:</label>
-                <div className="col-sm-9">
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="apellidos"
-                    value={formData.apellidos}
-                    readOnly
-                  />
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Fecha de Nacimiento:</label>
-                <div className="col-sm-9">
-                  <input
-                    type="date"
-                    className="form-control"
-                    name="fechaNacimiento"
-                    value={formData.fechaNacimiento}
-                    readOnly
-                  />
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Estatura (cm):</label>
-                <div className="col-sm-9">
-                  <input
-                    type="number"
-                    className="form-control"
-                    name="estatura"
-                    value={formData.estatura}
-                    onChange={handleInputChange}
-                  />
-                  {errorEstatura && !validarEstatura(formData.estatura) && (
-                    <p className="pError">Estatura no válida</p>
-                  )}
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Cédula:</label>
-                <div className="col-sm-9">
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="cedula"
-                    value={formData.cedula}
-                    readOnly
-                  />
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">
-                  Número Telefónico:
-                </label>
-                <div className="col-sm-9">
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="telefono"
-                    value={formData.telefono}
-                    onChange={handleInputChange}
-                  />
-                  {errorTelefono && !validarNumeroTelefonico(formData.telefono) && (
-                    <p className="pError">Número telefónico incorrecto</p>
-                  )}
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Peso (kg):</label>
-                <div className="col-sm-9">
-                  <input
-                    type="number"
-                    className="form-control"
-                    name="peso"
-                    value={formData.peso}
-                    onChange={handleInputChange}
-                  />
-                  {errorPeso && !validarPeso(formData.peso) && (
-                    <p className="pError">Ingrese un peso válido</p>
-                  )}
-                </div>
-              </div>
-            </form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleUpdateModalClose}>
-              Cerrar
-            </Button>
-            <Button variant="primary" onClick={handleGuardarUpdate}>
-              Actualizar
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        <ModalUpdate
+          showUpdateModal={showUpdateModal}
+          handleUpdateModalClose={handleUpdateModalClose}
+          formData={formData}
+          handleInputChange={handleInputChange}
+          errorEstatura={errorEstatura}
+          errorTelefono={errorTelefono}
+          errorPeso={errorPeso}
+          validarEstatura={validarEstatura}
+          validarNumeroTelefonico={validarNumeroTelefonico}
+          validarPeso={validarPeso}
+          handleGuardarUpdate={handleGuardarUpdate}
+        />
       </div>
     </Layout>
   );

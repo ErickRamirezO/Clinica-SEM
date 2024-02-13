@@ -4,27 +4,35 @@ import { useParams } from "react-router-dom";
 import "./historial.css";
 import Layout from "../../components/Navbar/Navbar";
 
-export default function Historial() {
-    const { pacienteId } = useParams();
+const Historial = () => {
+    const { id } = useParams();
     const [paciente, setPaciente] = useState(null);
 
     useEffect(() => {
-        const fetchPacienteData = async () => {
+        const fetchPaciente = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/auth/pacientes/${pacienteId}`);
+                const response = await fetch(`http://localhost:3001/auth/pacientes/${id}`);
                 if (response.ok) {
                     const data = await response.json();
-                    setPaciente(data);
+                    if (data.length > 0) {
+                        setPaciente(data[0]);
+                    } else {
+                        console.error('Paciente no encontrado');
+                    }
                 } else {
-                    console.error("Error al obtener los datos del paciente");
+                    console.error('Error al obtener el paciente');
                 }
             } catch (error) {
-                console.error("Error de red", error);
+                console.error('Error de red:', error);
             }
         };
 
-        fetchPacienteData();
-    }, [pacienteId]);
+        fetchPaciente();
+    }, [id]);
+
+    if (!paciente) {
+        return <p>Cargando...</p>;
+    }
 
     return (
         <Layout>
@@ -41,15 +49,15 @@ export default function Historial() {
                                     <table className="maximo">
                                         <tr>
                                             <td className="autoTam">NOMBRES Y APELLIDO</td>
-                                            <td className="autoTam">{`${paciente?.nombres} ${paciente?.apellidos}`}</td>
+                                            <td className="autoTam">{paciente.nombres}</td>
                                         </tr>
                                         <tr>
                                             <td className="autoTam">Fecha de nacimiento</td>
-                                            <td className="autoTam">{paciente?.fechaNacimiento}</td>
+                                            <td className="autoTam">{paciente.fechaNacimiento}</td>
                                         </tr>
                                         <tr>
                                             <td className="autoTam">Edad</td>
-                                            <td className="autoTam">{/* Calcular la edad según la fecha de nacimiento y la fecha actual */}</td>
+                                            <td className="autoTam">sss</td>
                                         </tr>
                                     </table>
                                 </td>
@@ -70,14 +78,14 @@ export default function Historial() {
                                     <i className="fas fa-heart"></i>
                                 </td>
                                 <td className="columnCont">Estatura</td>
-                                <td className="columnCont">1,5</td>
+                                <td className="columnCont"> {paciente.estatura}</td>
                             </tr>
                             <tr>
                                 <td className="columnIco">
                                     <i className="fas fa-heart"></i>
                                 </td>
                                 <td className="columnCont">Peso</td>
-                                <td className="columnCont">3</td>
+                                <td className="columnCont">{paciente.peso}</td>
                             </tr>
                             <tr>
                                 <td className="columnIco">
@@ -118,7 +126,7 @@ export default function Historial() {
                                         <i className="fas fa-heart"></i>
                                     </td>
                                     <td className="columnaAntecedentes">
-                                       
+
                                     </td>
                                 </tr>
                             </table>
@@ -128,4 +136,7 @@ export default function Historial() {
             </div>
         </Layout>
     );
-}
+
+};
+
+export default Historial;

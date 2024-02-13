@@ -110,6 +110,25 @@ button {
   margin-top: 10px; /* Espaciado superior */
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.btnAtras{
+  background-color: #721c24;
+  color: white;
+  border-radius: 10px;
+}
+
+.btnSiguiente{
+  background-color: green;
+  color: white;
+  border-radius: 10px;
+}
+
+
 /*--------------------------------------MODAL*/
 .pError{
   font-size: 11px;
