@@ -152,7 +152,7 @@ router.get('/lista-pacientes', async (req, res) => {
   }
 });
 
-// Ruta para obtener la lista de pacientes en historial
+// Ruta para obtener la lista de pacientes completa
 router.get('/pacientes/:id', async (req, res) => {
   try {
     const pacientes = await Paciente.find();
@@ -162,6 +162,21 @@ router.get('/pacientes/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Ruta para obtener un paciente por su ID
+router.get('/paciente-historial/:id', async (req, res) => {
+  try {
+    const paciente = await Paciente.findById(req.params.id);
+    if (!paciente) {
+      return res.status(404).json({ error: 'Paciente no encontrado' });
+    }
+
+    res.status(200).json(paciente);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 // Ruta para actualizar un paciente
 router.put('/actualizar-paciente/:id', async (req, res) => {

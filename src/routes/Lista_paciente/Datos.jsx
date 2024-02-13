@@ -9,11 +9,11 @@ const Datos = () => {
     useEffect(() => {
         const fetchPaciente = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/auth/pacientes/${id}`);
+                const response = await fetch(`http://localhost:3001/auth/paciente-historial/${id}`);
                 if (response.ok) {
                     const data = await response.json();
-                    if (data.length > 0) {
-                        setPaciente(data[0]);
+                    if (data !== null) {
+                        setPaciente(data);
                     } else {
                         console.error('Paciente no encontrado');
                     }
@@ -45,8 +45,7 @@ const Datos = () => {
     return (
         <div>
             <h2>Datos del Paciente</h2>
-            <p><strong>Nombres:</strong> {paciente.nombres}</p>
-            <p><strong>Apellidos:</strong> {paciente.apellidos}</p>
+            <p><strong>Nombres y apellidos:</strong>{`${paciente.nombres} ${paciente.apellidos}`}</p>
             <p><strong>Fecha de Nacimiento:</strong> {paciente.fechaNacimiento}</p>
             <p><strong>Estatura:</strong> {paciente.estatura}</p>
             <p><strong>Cédula:</strong> {paciente.cedula}</p>

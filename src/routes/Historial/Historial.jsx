@@ -1,4 +1,3 @@
-// Historial.jsx
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./historial.css";
@@ -7,15 +6,16 @@ import Layout from "../../components/Navbar/Navbar";
 const Historial = () => {
     const { id } = useParams();
     const [paciente, setPaciente] = useState(null);
+    const [prevId, setPrevId] = useState(null);
 
     useEffect(() => {
         const fetchPaciente = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/auth/pacientes/${id}`);
+                const response = await fetch(`http://localhost:3001/auth/paciente-historial/${id}`);
                 if (response.ok) {
                     const data = await response.json();
-                    if (data.length > 0) {
-                        setPaciente(data[0]);
+                    if (data !== null) {
+                        setPaciente(data);
                     } else {
                         console.error('Paciente no encontrado');
                     }
@@ -27,12 +27,45 @@ const Historial = () => {
             }
         };
 
-        fetchPaciente();
-    }, [id]);
+        // Verificar si el ID ha cambiado antes de hacer la solicitud
+        if (id !== prevId) {
+            setPrevId(id);
+            fetchPaciente();
+        }
+
+        // Limpiar el estado del paciente cuando el ID cambie
+        return () => {
+            setPaciente(null);
+        };
+    }, [id, prevId]);
+
 
     if (!paciente) {
         return <p>Cargando...</p>;
     }
+
+    // Formatear la fecha de nacimiento
+    const fechaNacimiento = new Date(paciente.fechaNacimiento);
+    const formattedFechaNacimiento = `${fechaNacimiento.getDate()}, ${fechaNacimiento.toLocaleString('default', { month: 'long' })} ${fechaNacimiento.getFullYear()}`;
+
+
+    // Función para calcular la edad a partir de la fecha de nacimiento
+    const calcularEdad = (fechaNacimiento) => {
+        const hoy = new Date();
+        const cumpleanos = new Date(fechaNacimiento);
+        let edad = hoy.getFullYear() - cumpleanos.getFullYear();
+        const mes = hoy.getMonth() - cumpleanos.getMonth();
+
+        if (mes < 0 || (mes === 0 && hoy.getDate() < cumpleanos.getDate())) {
+            edad--;
+        }
+
+        return edad;
+    };
+
+    // Uso en tu componente
+    const edad = calcularEdad(paciente.fechaNacimiento);
+
 
     return (
         <Layout>
@@ -48,16 +81,13 @@ const Historial = () => {
                                 <td className="medio">
                                     <table className="maximo">
                                         <tr>
-                                            <td className="autoTam">NOMBRES Y APELLIDO</td>
-                                            <td className="autoTam">{paciente.nombres}</td>
+                                            <td className="autoTam">{`${paciente.nombres} ${paciente.apellidos}`}</td>
                                         </tr>
                                         <tr>
-                                            <td className="autoTam">Fecha de nacimiento</td>
-                                            <td className="autoTam">{paciente.fechaNacimiento}</td>
+                                            <td className="autoTam">{formattedFechaNacimiento}</td>
                                         </tr>
                                         <tr>
-                                            <td className="autoTam">Edad</td>
-                                            <td className="autoTam">sss</td>
+                                            <td className="autoTam">{edad}</td>
                                         </tr>
                                     </table>
                                 </td>

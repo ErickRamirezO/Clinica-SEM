@@ -317,7 +317,7 @@ export default function Lista_paciente() {
                     <td>{`${paciente.fechaCreacion}`}</td>
                     <td><p>Paciente resgistrado</p></td>
                     <td>
-                      <Link to={`/dato/${paciente._id}`}>
+                      <Link to={`/historial-paciente/${paciente._id}`}>
                         <button id="btn1">Ver Paciente</button>
                       </Link>
                       <button id="btnActualizarHistorial" onClick={() => handleUpdateModalOpen(paciente)}>
