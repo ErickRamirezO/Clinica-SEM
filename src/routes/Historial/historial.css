@@ -61,13 +61,17 @@
     align-content: center;
 }
 .columnIco{
-    width: 10%;
+    width: 20%;
     height: 30px;
     align-content: center;  
 }
 .columnCont{
     width: 45%;
-    text-align: center;
+    text-align: start;
+}
+
+.tablaSignosVitales{
+    width: 50%;
 }
 .iconoA{
     width: 10% !important;

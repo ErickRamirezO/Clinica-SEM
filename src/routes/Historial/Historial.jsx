@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./historial.css";
 import Layout from "../../components/Navbar/Navbar";
-import { Navbar, Container, InputGroup, FormControl } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRuler, faWeight, faThermometer } from "@fortawesome/free-solid-svg-icons";
+
 
 const Historial = () => {
     const { id } = useParams();
@@ -94,37 +96,35 @@ const Historial = () => {
                                 </td>
                             </tr>
                         </table>
-                        <div>
-                            <p className="notasP">NOTAS</p>
-                        </div>
                     </div>
                     <div className="IzqSignos">
                         <p className="center">
                             <i className="fas fa-heart columnIco "></i>
                             <input type="date" className="medio" />
                         </p>
-                        <table className="maximo tablaSin">
+                        <table className="maximo tablaSin tablaSignosVitales">
                             <tr>
                                 <td className="columnIco">
-                                    <i className="fas fa-heart"></i>
+                                    <FontAwesomeIcon icon={faRuler} />
                                 </td>
-                                <td className="columnCont">Estatura</td>
-                                <td className="columnCont"> {paciente.estatura} metros</td>
+                                <td className="columnCont"> Estatura</td>
+                                <td className="columnCont">{paciente.estatura} metros</td>
                             </tr>
                             <tr>
                                 <td className="columnIco">
-                                    <i className="fas fa-heart"></i>
+                                    <FontAwesomeIcon icon={faWeight} />
                                 </td>
                                 <td className="columnCont">Peso</td>
                                 <td className="columnCont">{paciente.peso} kg</td>
                             </tr>
                             <tr>
                                 <td className="columnIco">
-                                    <i className="fas fa-heart"></i>
+                                    <FontAwesomeIcon icon={faThermometer} />
                                 </td>
                                 <td className="columnCont">Temperatura</td>
                                 <td className="columnCont">{paciente.temperatura} °</td>
                             </tr>
+
                         </table>
                     </div>
                 </div>
