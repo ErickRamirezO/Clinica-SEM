@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./historial.css";
 import Layout from "../../components/Navbar/Navbar";
+import { Navbar, Container, InputGroup, FormControl } from 'react-bootstrap';
 
 const Historial = () => {
     const { id } = useParams();
@@ -49,7 +50,7 @@ const Historial = () => {
     const formattedFechaNacimiento = `${fechaNacimiento.getDate()}, ${fechaNacimiento.toLocaleString('default', { month: 'long' })} ${fechaNacimiento.getFullYear()}`;
 
 
-    // Función para calcular la edad a partir de la fecha de nacimiento
+    //Calcular la edad a partir de la fecha de nacimiento
     const calcularEdad = (fechaNacimiento) => {
         const hoy = new Date();
         const cumpleanos = new Date(fechaNacimiento);
@@ -87,7 +88,7 @@ const Historial = () => {
                                             <td className="autoTam">{formattedFechaNacimiento}</td>
                                         </tr>
                                         <tr>
-                                            <td className="autoTam">{edad}</td>
+                                            <td className="autoTam">{edad} años</td>
                                         </tr>
                                     </table>
                                 </td>
@@ -108,28 +109,21 @@ const Historial = () => {
                                     <i className="fas fa-heart"></i>
                                 </td>
                                 <td className="columnCont">Estatura</td>
-                                <td className="columnCont"> {paciente.estatura}</td>
+                                <td className="columnCont"> {paciente.estatura} metros</td>
                             </tr>
                             <tr>
                                 <td className="columnIco">
                                     <i className="fas fa-heart"></i>
                                 </td>
                                 <td className="columnCont">Peso</td>
-                                <td className="columnCont">{paciente.peso}</td>
+                                <td className="columnCont">{paciente.peso} kg</td>
                             </tr>
                             <tr>
                                 <td className="columnIco">
                                     <i className="fas fa-heart"></i>
                                 </td>
                                 <td className="columnCont">Temperatura</td>
-                                <td className="columnCont">32</td>
-                            </tr>
-                            <tr>
-                                <td className="columnIco">
-                                    <i className="fas fa-heart"></i>
-                                </td>
-                                <td className="columnCont">Presion Arterial</td>
-                                <td className="columnCont">3</td>
+                                <td className="columnCont">{paciente.temperatura} °</td>
                             </tr>
                         </table>
                     </div>

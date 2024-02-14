@@ -9,6 +9,7 @@ import {
   validarCedulaEcuatoriana,
   validarNumeroTelefonico,
   validarPeso,
+  validarTemperatura,
 } from "../../validate";
 import ModalRegistro from "./ModalRegistro";
 import ModalUpdate from "./ModalUpdate";
@@ -25,6 +26,7 @@ export default function Lista_paciente() {
     cedula: "",
     telefono: "",
     peso: 0,
+    temperatura: 0,
   });
 
   const [pacientes, setPacientes] = useState([]);
@@ -36,6 +38,7 @@ export default function Lista_paciente() {
   const [errorCedula, setErrorCedula] = useState("");
   const [errorTelefono, setErrorTelefono] = useState("");
   const [errorPeso, setErrorPeso] = useState("");
+  const [errorTemperatura, setErrorTemperatura] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
@@ -68,6 +71,7 @@ export default function Lista_paciente() {
     setErrorCedula("");
     setErrorTelefono("");
     setErrorPeso("");
+    setErrorTemperatura("");
     setMensajeError("");
   };
 
@@ -105,6 +109,8 @@ export default function Lista_paciente() {
       ...formData,
       [e.target.name]: e.target.value,
     });
+    setErrorTemperatura(!validarTemperatura(value));
+
   };
 
   const handleGuardarUpdate = async () => {
@@ -116,6 +122,7 @@ export default function Lista_paciente() {
       const validCedula = validarCedulaEcuatoriana(formData.cedula);
       const validTelefono = validarNumeroTelefonico(formData.telefono);
       const validPeso = validarPeso(formData.peso);
+      const validTemperatura = validarTemperatura(formData.temperatura);
 
       // Verificar si hay algún error
       if (
@@ -124,7 +131,8 @@ export default function Lista_paciente() {
         !validEstatura ||
         !validCedula ||
         !validTelefono ||
-        !validPeso
+        !validPeso ||
+        !validTemperatura
       ) {
         // Mostrar todos los mensajes de error al mismo tiempo
         setErrorNombres(validNombres ? "" : "Por favor ingresa nombres válidos.");
@@ -133,6 +141,7 @@ export default function Lista_paciente() {
         setErrorCedula(validCedula ? "" : "Por favor ingresa una cédula ecuatoriana válida.");
         setErrorTelefono(validTelefono ? "" : "Por favor ingresa un número telefónico válido.");
         setErrorPeso(validPeso ? "" : "Por favor ingresa un peso válido.");
+        setErrorTemperatura(validTemperatura ? "" : "Por favor ingresa una temperatura válida.");
         return;
       }
 
@@ -180,6 +189,7 @@ export default function Lista_paciente() {
       const validCedula = validarCedulaEcuatoriana(formData.cedula);
       const validTelefono = validarNumeroTelefonico(formData.telefono);
       const validPeso = validarPeso(formData.peso);
+      const validTemperatura = validarTemperatura(formData.temperatura);
 
       // Verificar si hay algún error
       if (
@@ -188,7 +198,9 @@ export default function Lista_paciente() {
         !validEstatura ||
         !validCedula ||
         !validTelefono ||
-        !validPeso
+        !validPeso ||
+        !validTemperatura
+
       ) {
         // Mostrar todos los mensajes de error al mismo tiempo
         setErrorNombres(validNombres ? "" : "Por favor ingresa nombres válidos.");
@@ -197,6 +209,8 @@ export default function Lista_paciente() {
         setErrorCedula(validCedula ? "" : "Por favor ingresa una cédula ecuatoriana válida.");
         setErrorTelefono(validTelefono ? "" : "Por favor ingresa un número telefónico válido.");
         setErrorPeso(validPeso ? "" : "Por favor ingresa un peso válido.");
+        setErrorTemperatura(validTemperatura ? "" : "Por favor ingresa una temperatura válida.");
+
         return;
       }
 
@@ -269,6 +283,7 @@ export default function Lista_paciente() {
       cedula: "",
       telefono: "",
       peso: 0,
+      temperatura: 0,
     });
   };
 
@@ -365,12 +380,14 @@ export default function Lista_paciente() {
           errorCedula={errorCedula}
           errorTelefono={errorTelefono}
           errorPeso={errorPeso}
+          errorTemperatura={errorTemperatura}
           validarNombresCompletos={validarNombresCompletos}
           validarApellidosCompletos={validarApellidosCompletos}
           validarEstatura={validarEstatura}
           validarCedulaEcuatoriana={validarCedulaEcuatoriana}
           validarNumeroTelefonico={validarNumeroTelefonico}
           validarPeso={validarPeso}
+          validarTemperatura={validarTemperatura}
           handleGuardar={handleGuardar}
           mensajeError={mensajeError}
         />
@@ -384,9 +401,11 @@ export default function Lista_paciente() {
           errorEstatura={errorEstatura}
           errorTelefono={errorTelefono}
           errorPeso={errorPeso}
+          errorTemperatura={errorTemperatura}
           validarEstatura={validarEstatura}
           validarNumeroTelefonico={validarNumeroTelefonico}
           validarPeso={validarPeso}
+          validarTemperatura={validarTemperatura}
           handleGuardarUpdate={handleGuardarUpdate}
         />
       </div>

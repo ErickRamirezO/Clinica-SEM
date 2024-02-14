@@ -18,6 +18,12 @@ export function validarEstatura(estatura) {
     return !isNaN(estatura) && estatura >= 0.3 && estatura <= 3.0;
 }
 
+export function validarTemperatura(temperatura) {
+    // Verificar si la temperatura está dentro del rango válido (36.0 - 39.9)
+    return !isNaN(temperatura) && temperatura >= 36.0 && temperatura <= 39.9;
+}
+
+
 export function validarCedulaEcuatoriana(cedula) {
     // Verificar si la cédula tiene 10 dígitos
     if (cedula.length !== 10 || isNaN(cedula)) {

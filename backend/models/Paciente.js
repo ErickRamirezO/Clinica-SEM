@@ -10,6 +10,7 @@ const pacienteSchema = new Schema({
     cedula: String,
     telefono: String,
     peso: Number,
+    temperatura: Number,
 }, { collection: 'Pacientes' }); 
 
 const Paciente = mongoose.model('Pacientes', pacienteSchema);

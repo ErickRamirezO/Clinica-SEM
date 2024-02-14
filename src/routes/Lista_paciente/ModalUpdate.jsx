@@ -9,9 +9,11 @@ const ModalRegistro = ({
     errorEstatura,
     errorTelefono,
     errorPeso,
+    errorTemperatura,
     validarEstatura,
     validarNumeroTelefonico,
     validarPeso,
+    validarTemperatura,
     handleGuardarUpdate,
 }) => {
     return (
@@ -114,6 +116,22 @@ const ModalRegistro = ({
                             />
                             {errorPeso && !validarPeso(formData.peso) && (
                                 <p className="pError">Ingrese un peso válido</p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="form-group row">
+                        <label className="col-sm-3 col-form-label">Temperatura (°):</label>
+                        <div className="col-sm-9">
+                            <input
+                                type="number"
+                                className="form-control"
+                                name="temperatura"
+                                value={formData.temperatura}
+                                onChange={handleInputChange}
+                                placeholder="34 - 39"
+                            />
+                            {errorTemperatura && !validarTemperatura(formData.temperatura) && (
+                                <p className="pError">Ingreso inválido</p>
                             )}
                         </div>
                     </div>
