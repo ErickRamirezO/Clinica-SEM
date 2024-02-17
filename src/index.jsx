@@ -12,8 +12,6 @@ import MiPerfil from "./routes/Registro/MiPerfil";
 import Historial from "./routes/Historial/Historial";
 import Inicio from "./routes/Inicio/Inicio";
 
-import Dato from "./routes/Lista_paciente/Datos";
-
 
 //RUTAS
 const router = createBrowserRouter([
@@ -51,10 +49,7 @@ const router = createBrowserRouter([
     path: "/historial-paciente/:id",
     element: <Historial />,
   },
-  {
-    path: "/dato/:id",
-    element: <Dato />,
-  },
+
 
 ]);
 

@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Paciente = require('../models/Paciente');
+const Historial = require('../models/Historial')
 
 
 const router = express.Router();
@@ -15,7 +16,7 @@ router.get('/profile', async (req, res) => {
   try {
     // Aquí obtienes el usuario actual autenticado (puedes usar información del token de autenticación)
     const currentUser = req.user; // Por ejemplo, si estás usando Passport.js, puedes acceder al usuario autenticado a través de req.user
-    
+
     // Si el usuario no está autenticado, responde con un error
     if (!currentUser) {
       return res.status(401).json({ message: 'Usuario no autenticado' });
@@ -47,7 +48,7 @@ router.post('/register', async (req, res) => {
       sexo,
       telefono
     } = req.body;
-    
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = new User({
@@ -77,38 +78,38 @@ router.post('/register', async (req, res) => {
 
 // Inicio de sesión
 router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-  
-    try {
-      // Busca el usuario en la base de datos
-      const user = await User.findOne({ username }).select('+password').exec();
-  
-      if (!user) {
-        // Si el usuario no existe, responde con un error
-        console.error('Inicio de sesión fallido: Usuario no encontrado');
-        return res.status(401).json({ message: 'Usuario no encontrado' });
-      }
-  
-      // Simple comparison of passwords (not recommended for production)
-      if (user.password !== password) {
-        // Si la contraseña no coincide, responde con un error
-        console.error('Inicio de sesión fallido: Credenciales inválidas');
-        return res.status(401).json({ message: 'Credenciales inválidas' });
-      }
-  
-      // Si las credenciales son válidas, puedes generar un token JWT aquí si lo necesitas
-      // ...
-  
-      // Responde con un mensaje de éxito
-      res.status(200).json({ message: 'Inicio de sesión exitoso' });
-    } catch (error) {
-      console.error('Error al iniciar sesión:', error);
-      res.status(500).json({ message: 'Error interno del servidor' });
-    }
-  });
+  const { username, password } = req.body;
 
-  //--------------------------------------------------------------------------------------------------PACIENTES
-  // Ruta para registrar un nuevo paciente
+  try {
+    // Busca el usuario en la base de datos
+    const user = await User.findOne({ username }).select('+password').exec();
+
+    if (!user) {
+      // Si el usuario no existe, responde con un error
+      console.error('Inicio de sesión fallido: Usuario no encontrado');
+      return res.status(401).json({ message: 'Usuario no encontrado' });
+    }
+
+    // Simple comparison of passwords (not recommended for production)
+    if (user.password !== password) {
+      // Si la contraseña no coincide, responde con un error
+      console.error('Inicio de sesión fallido: Credenciales inválidas');
+      return res.status(401).json({ message: 'Credenciales inválidas' });
+    }
+
+    // Si las credenciales son válidas, puedes generar un token JWT aquí si lo necesitas
+    // ...
+
+    // Responde con un mensaje de éxito
+    res.status(200).json({ message: 'Inicio de sesión exitoso' });
+  } catch (error) {
+    console.error('Error al iniciar sesión:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
+
+//--------------------------------------------------------------------------------------------------PACIENTES
+// Ruta para registrar un nuevo paciente
 router.post('/registro-paciente', async (req, res) => {
   try {
     const {
@@ -184,7 +185,7 @@ router.get('/paciente-historial/:id', async (req, res) => {
 router.put('/actualizar-paciente/:id', async (req, res) => {
   try {
     const pacienteId = req.params.id;
-    const updatedPaciente = req.body; 
+    const updatedPaciente = req.body;
 
     // Realiza la actualización en la base de datos
     const result = await Paciente.findByIdAndUpdate(pacienteId, updatedPaciente, { new: true });
@@ -197,7 +198,56 @@ router.put('/actualizar-paciente/:id', async (req, res) => {
 });
 
 
-//-------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------- HISTORIAL
+//guardar historial
+router.post('/guardar-historial', async (req, res) => {
+  try {
+    const {
+      fechaCreacion,
+      paciente,
+      cedula,
+      doctor,
+      diagnostico,
+      receta,
+      alergias,
+    } = req.body;
+
+    const nuevoHistorial = new Historial({
+      fechaCreacion,
+      paciente,
+      cedula,
+      doctor,
+      diagnostico,
+      receta,
+      alergias,
+    });
+
+    await nuevoHistorial.save();
+
+    res.status(201).json({ message: 'Paciente registrado exitosamente' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+// Ruta para obtener historiales por cedula de paciente
+router.get('/obtener-historiales/:cedula', async (req, res) => {
+  try {
+    const { cedula } = req.params;
+    const historiales = await Historial.find({ cedula });
+
+    if (historiales.length === 0) {
+      return res.status(404).json({ error: 'No hay historiales médicos para este paciente' });
+    }
+
+    res.status(200).json(historiales);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+//----------------------------------------------------------------------------------------------------------------------------
 
 
 module.exports = router;

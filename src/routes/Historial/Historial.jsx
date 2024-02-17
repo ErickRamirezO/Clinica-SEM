@@ -3,13 +3,36 @@ import { useParams } from "react-router-dom";
 import "./historial.css";
 import Layout from "../../components/Navbar/Navbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRuler, faWeight, faThermometer } from "@fortawesome/free-solid-svg-icons";
-
+import { faRuler, faWeight, faThermometer, faPlus, faCamera } from "@fortawesome/free-solid-svg-icons";
+import ModalHistorial from "./ModalHistorial";
 
 const Historial = () => {
     const { id } = useParams();
     const [paciente, setPaciente] = useState(null);
+    const [historiales, setHistoriales] = useState([]);
     const [prevId, setPrevId] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [foto, setFoto] = useState(null);
+
+    const handleModalOpen = () => {
+        setShowModal(true);
+    };
+
+    const handleModalClose = () => {
+        setShowModal(false);
+    };
+
+    const handleFotoChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFoto(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
 
     useEffect(() => {
         const fetchPaciente = async () => {
@@ -42,17 +65,41 @@ const Historial = () => {
         };
     }, [id, prevId]);
 
+    //obtenemos los historiales en base a la comparación de sus cédulas
+    useEffect(() => {
+        const fetchHistoriales = async () => {
+            try {
+                const response = await fetch(`http://localhost:3001/auth/obtener-historiales/${paciente.cedula}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data !== null) {
+                        const historialesPaciente = data.filter(historial => historial.cedula === paciente.cedula);
+                        setHistoriales(historialesPaciente);
+                    } else {
+                        console.error('No se encontraron historiales para el paciente');
+                    }
+                } else {
+                    console.error('Error al obtener los historiales');
+                }
+            } catch (error) {
+                console.error('Error de red:', error);
+            }
+        };
+
+        if (paciente) {
+            fetchHistoriales();
+        }
+    }, [paciente]);
+
+
 
     if (!paciente) {
         return <p>Cargando...</p>;
     }
 
-    // Formatear la fecha de nacimiento
     const fechaNacimiento = new Date(paciente.fechaNacimiento);
     const formattedFechaNacimiento = `${fechaNacimiento.getDate()}, ${fechaNacimiento.toLocaleString('default', { month: 'long' })} ${fechaNacimiento.getFullYear()}`;
 
-
-    //Calcular la edad a partir de la fecha de nacimiento
     const calcularEdad = (fechaNacimiento) => {
         const hoy = new Date();
         const cumpleanos = new Date(fechaNacimiento);
@@ -66,7 +113,6 @@ const Historial = () => {
         return edad;
     };
 
-    // Uso en tu componente
     const edad = calcularEdad(paciente.fechaNacimiento);
 
 
@@ -79,7 +125,11 @@ const Historial = () => {
                         <table className="maximo tablaSin">
                             <tr>
                                 <td className="autoTam">
-                                    <img src="" alt="" className="fotoUsuario" />
+                                    <label htmlFor="fotoInput">
+                                        <FontAwesomeIcon icon={faCamera} />
+                                        <input id="fotoInput" type="file" accept="image/*" onChange={handleFotoChange} style={{ display: 'none' }} />
+                                    </label>
+                                    {foto && <img src={foto} alt="Foto de usuario" className="fotoUsuario" />}
                                 </td>
                                 <td className="medio">
                                     <table className="maximo">
@@ -98,14 +148,10 @@ const Historial = () => {
                         </table>
                     </div>
                     <div className="IzqSignos">
-                        <p className="center">
-                            <i className="fas fa-heart columnIco "></i>
-                            <input type="date" className="medio" />
-                        </p>
                         <table className="maximo tablaSin tablaSignosVitales">
                             <tr>
                                 <td className="columnIco">
-                                    <FontAwesomeIcon icon={faRuler} />
+                                    <FontAwesomeIcon icon={faRuler} onClick={() => handleModalOpen()} />
                                 </td>
                                 <td className="columnCont"> Estatura</td>
                                 <td className="columnCont">{paciente.estatura} metros</td>
@@ -127,37 +173,59 @@ const Historial = () => {
 
                         </table>
                     </div>
-                </div>
-                <div className="ContenedorHistorialDer">
                     <div className="IzqInformacion">
-                        <div>
-                            <table className="maximo tablaSin">
-                                <tr>
-                                    <td className="iconoA">
-                                        <i className="fas fa-heart"></i>
-                                    </td>
-                                    <td className="columnaAntecedentes">
-                                        ALERGIAS:
-                                        <ul>
-                                            <li>UNO</li>
-                                            <li>UNO</li>
-                                            <li>UNO</li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className="iconoA">
-                                        <i className="fas fa-heart"></i>
-                                    </td>
-                                    <td className="columnaAntecedentes">
-
-                                    </td>
-                                </tr>
-                            </table>
+                        <h6>ALERGIAS</h6>
+                        <div className="info1">
+                            {historiales.map((historial, index) => (
+                                <div key={index} className="historialItem">
+                                    <div className="alergiasHistorial">
+                                        <p>Alergias: {historial.alergias}</p>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
+                <div className="ContenedorHistorialDer">
+                    <h6>HISTORIAL</h6>
+                    <div className="buscadores">
+                        <div className="iconoMas" >
+                            <FontAwesomeIcon icon={faPlus} onClick={() => handleModalOpen()} />
+                        </div>
+                        <div className="searchFecha">
+                            <input type="date" />
+                        </div>
+                        <div className="searchBarra">
+                            <input type="text" placeholder="Buscar..." />
+                        </div>
+                    </div>
+                    <div className="info2">
+                        {historiales.map((historial, index) => (
+                            <div key={index} className="historialItem">
+                                <div className="fechaHistorial">
+                                    <p>Fecha de atención: {historial.fechaCreacion}</p>
+                                </div>
+                                <div className="doctorHistorial">
+                                    <p>Doctor encargado: {historial.doctor}</p>
+                                </div>
+                                <div className="diagnosticoHistorial">
+                                    <p>Diagnóstico: {historial.diagnostico}</p>
+                                </div>
+                                <div className="recetaMedica">
+                                    <p>Receta médica: {historial.receta}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
+
+            {/* Modal registrar paciente */}
+            <ModalHistorial
+                showModal={showModal}
+                handleModalClose={handleModalClose}
+                paciente={paciente}
+            />
         </Layout>
     );
 

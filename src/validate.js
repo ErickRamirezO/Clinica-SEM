@@ -1,4 +1,4 @@
-// validate.js
+//-----------------------------------------------------------------------------------------------------------------VALIDACIONES PACIENTES
 
 export function validarNombresCompletos(nombres) {
     // Expresión regular para validar nombres y apellidos con letras acentuadas, "ñ" y espacio opcional al final
@@ -65,3 +65,6 @@ export function validarPeso(peso) {
     // Verificar si el peso está dentro del rango válido (4 - 300)
     return !isNaN(peso) && peso >= 4 && peso <= 300;
 }
+
+
+//-----------------------------------------------------------------------------------------------------------------VALIDACIONES HISTORIAL
