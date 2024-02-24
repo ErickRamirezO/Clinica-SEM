@@ -8,6 +8,7 @@ const pacienteSchema = new Schema({
     fechaNacimiento: Date,
     estatura: Number,
     cedula: String,
+    correo: String,
     telefono: String,
     peso: Number,
     temperatura: Number,

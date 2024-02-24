@@ -16,8 +16,11 @@ const CustomNavbar = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbar" />
         <Navbar.Collapse id="navbar" className="justify-content-end">
-          <InputGroup className="ms-md-3 search-bar">
-            <p>La clinica del amor UwU</p>
+          <InputGroup className="user">
+            <Link to="/mi-perfil" className="sidenav-link">
+              <FontAwesomeIcon icon={faUserCircle} />
+              <p>Mi perfil</p>
+            </Link>
           </InputGroup>
           <SideNav />
         </Navbar.Collapse>
@@ -50,20 +53,20 @@ const SideNav = () => {
           <FontAwesomeIcon icon={faUser} />
           <p>Pacientes</p>
         </Link>
+        <Link to="/lista-de-doctores" className="sidenav-link ">
+          <FontAwesomeIcon icon={faUser} />
+          <p>Doctores</p>
+        </Link>
         <Link to="/chat" className="sidenav-link">
           <FontAwesomeIcon icon={faComments} />
           <p>Chat</p>
         </Link>
-        <Link to="/mi-perfil" className="sidenav-link">
-          <FontAwesomeIcon icon={faUserCircle} />
-          <p>Mi perfil</p>
-        </Link>
       </div>
       <div className='inferior'>
-      <Link className="sidenav-link iconSalir" onClick={handleSignOut}>
-        <FontAwesomeIcon icon={faSignOutAlt} />
-        <p>Salir</p>
-      </Link>
+        <Link className="sidenav-link iconSalir" onClick={handleSignOut}>
+          <FontAwesomeIcon icon={faSignOutAlt} />
+          <p>Salir</p>
+        </Link>
       </div>
     </div>
   );

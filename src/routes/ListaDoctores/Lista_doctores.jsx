@@ -1,47 +1,40 @@
 import React, { useState, useEffect } from "react";
-import "./Lista_paciente.css";
+import "./Lista_doctores.css";
 import Layout from "../../components/Navbar/Navbar";
 import { Link } from "react-router-dom";
 import {
   validarNombresCompletos,
   validarApellidosCompletos,
-  validarEstatura,
   validarCedulaEcuatoriana,
   validarNumeroTelefonico,
-  validarPeso,
-  validarTemperatura,
-  validarCorreo
+  validarCorreo,
 } from "../../validate";
 import ModalRegistro from "./ModalRegistro";
 import ModalUpdate from "./ModalUpdate";
 
-export default function Lista_paciente() {
+export default function Lista_doctores() {
   const [showModal, setShowModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [formData, setFormData] = useState({
     fechaCreacion: new Date().toLocaleDateString(),
     nombres: "",
     apellidos: "",
-    fechaNacimiento: "",
-    estatura: 0,
     cedula: "",
+    fechaNacimiento: "",
     telefono: "",
-    correo:"",
-    peso: 0,
-    temperatura: 0,
+    correo: "",
+    especialidad: "",
   });
 
-  const [pacientes, setPacientes] = useState([]);
-  const [selectedPaciente, setSelectedPaciente] = useState(null);
+
+  const [doctores, setDoctores] = useState([]);
+  const [selectedDoctor, setSelectedDoctores] = useState(null);
   const [mensajeError, setMensajeError] = useState("");
   const [errorNombres, setErrorNombres] = useState("");
   const [errorApellidos, setErrorApellidos] = useState("");
-  const [errorEstatura, setErrorEstatura] = useState("");
-  const [errorCedula, setErrorCedula] = useState("");
   const [errorCorreo, setErrorCorreo] = useState("");
+  const [errorCedula, setErrorCedula] = useState("");
   const [errorTelefono, setErrorTelefono] = useState("");
-  const [errorPeso, setErrorPeso] = useState("");
-  const [errorTemperatura, setErrorTemperatura] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
@@ -51,18 +44,18 @@ export default function Lista_paciente() {
     setSearchTerm(e.target.value);
   };
 
-  // Filtrar la lista de pacientes según el término de búsqueda
-  const filteredPacientes = pacientes.filter((paciente) => {
+  // Filtrar la lista de doctores según el término de búsqueda
+  const filteredDoctores = doctores.filter((doctores) => {
     return (
-      paciente.nombres.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      paciente.apellidos.toLowerCase().includes(searchTerm.toLowerCase())
+      doctores.nombres.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doctores.apellidos.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
   // Calcular índices del primer y último elemento de la página actual
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentPacientes = filteredPacientes
+  const currentDoctores = filteredDoctores
     .slice(indexOfFirstItem, indexOfLastItem)
     .sort((a, b) => a._id - b._id); // Ordenar por ID de manera descendente
 
@@ -70,12 +63,9 @@ export default function Lista_paciente() {
   const resetErrors = () => {
     setErrorNombres("");
     setErrorApellidos("");
-    setErrorEstatura("");
+    setErrorCorreo("");
     setErrorCedula("");
     setErrorTelefono("");
-    setErrorPeso("");
-    setErrorTemperatura("");
-    setErrorCorreo("");
     setMensajeError("");
   };
 
@@ -90,19 +80,19 @@ export default function Lista_paciente() {
     resetErrors();
   };
 
-  const handleUpdateModalOpen = (paciente) => {
+  const handleUpdateModalOpen = (doctores) => {
     setShowUpdateModal(true);
-    setSelectedPaciente(paciente);
+    setSelectedDoctores(doctores);
     setFormData({
-      ...paciente,
-      fechaNacimiento: new Date(paciente.fechaNacimiento).toISOString().split('T')[0],
+      ...doctores,
+      fechaNacimiento: new Date(doctores.fechaNacimiento).toISOString().split('T')[0],
     });
     setMensajeError("");
   };
 
   const handleUpdateModalClose = () => {
     setShowUpdateModal(false);
-    setSelectedPaciente(null);
+    setSelectedDoctores(null);
     resetFormData();
     setMensajeError("");
     resetErrors();
@@ -113,8 +103,6 @@ export default function Lista_paciente() {
       ...formData,
       [e.target.name]: e.target.value,
     });
-    setErrorTemperatura(!validarTemperatura(value));
-
   };
 
   const handleGuardarUpdate = async () => {
@@ -122,41 +110,32 @@ export default function Lista_paciente() {
       // Validar todos los campos
       const validNombres = validarNombresCompletos(formData.nombres);
       const validApellidos = validarApellidosCompletos(formData.apellidos);
-      const validEstatura = validarEstatura(formData.estatura);
+      const validCorreo = validarCorreo(formData.correo);
       const validCedula = validarCedulaEcuatoriana(formData.cedula);
       const validTelefono = validarNumeroTelefonico(formData.telefono);
-      const validCorreo = validarCorreo(formData.correo);
-      const validPeso = validarPeso(formData.peso);
-      const validTemperatura = validarTemperatura(formData.temperatura);
 
       // Verificar si hay algún error
       if (
         !validNombres ||
         !validApellidos ||
-        !validEstatura ||
-        !validCedula ||
-        !validTelefono ||
         !validCorreo ||
-        !validPeso ||
-        !validTemperatura
+        !validCedula ||
+        !validTelefono
       ) {
         // Mostrar todos los mensajes de error al mismo tiempo
         setErrorNombres(validNombres ? "" : "Por favor ingresa nombres válidos.");
         setErrorApellidos(validApellidos ? "" : "Por favor ingresa apellidos válidos.");
-        setErrorEstatura(validEstatura ? "" : "Por favor ingresa una estatura válida.");
+        setErrorCorreo(validCorreo ? "" : "Por favor ingresa un correo válido.");
         setErrorCedula(validCedula ? "" : "Por favor ingresa una cédula ecuatoriana válida.");
         setErrorTelefono(validTelefono ? "" : "Por favor ingresa un número telefónico válido.");
-        setErrorCorreo(validCorreo ? "" : "Por favor ingresa un correo válido.");
-        setErrorPeso(validPeso ? "" : "Por favor ingresa un peso válido.");
-        setErrorTemperatura(validTemperatura ? "" : "Por favor ingresa una temperatura válida.");
         return;
       }
 
-      const endpoint = selectedPaciente
-        ? `http://localhost:3001/auth/actualizar-paciente/${selectedPaciente._id}`
-        : "http://localhost:3001/auth/registro-paciente";
+      const endpoint = selectedDoctor
+        ? `http://localhost:3001/auth/actualizar-doctores/${selectedDoctor._id}`
+        : "http://localhost:3001/auth/registro-doctores";
 
-      const method = selectedPaciente ? "PUT" : "POST";
+      const method = selectedDoctor ? "PUT" : "POST";
 
       const response = await fetch(endpoint, {
         method,
@@ -170,17 +149,17 @@ export default function Lista_paciente() {
 
       if (response.ok) {
         console.log(
-          selectedPaciente
-            ? "Paciente actualizado exitosamente"
-            : "Paciente guardado exitosamente"
+          selectedDoctor
+            ? "doctores actualizado exitosamente"
+            : "doctores guardado exitosamente"
         );
-        fetchPacientes();
+        fetchDoctores();
         resetFormData();
         setMensajeError("");
         handleModalClose();
         handleUpdateModalClose();
       } else {
-        console.error("Error al guardar o actualizar el paciente");
+        console.error("Error al guardar o actualizar el doctor");
       }
     } catch (error) {
       console.error("Error de red", error);
@@ -192,50 +171,40 @@ export default function Lista_paciente() {
       // Validar todos los campos
       const validNombres = validarNombresCompletos(formData.nombres);
       const validApellidos = validarApellidosCompletos(formData.apellidos);
-      const validEstatura = validarEstatura(formData.estatura);
+      const validCorreo = validarCorreo(formData.correo);
       const validCedula = validarCedulaEcuatoriana(formData.cedula);
       const validTelefono = validarNumeroTelefonico(formData.telefono);
-      const validCorreo = validarCorreo(formData.correo);
-      const validPeso = validarPeso(formData.peso);
-      const validTemperatura = validarTemperatura(formData.temperatura);
 
       // Verificar si hay algún error
       if (
         !validNombres ||
         !validApellidos ||
-        !validEstatura ||
-        !validCedula ||
-        !validTelefono ||
         !validCorreo ||
-        !validPeso ||
-        !validTemperatura
+        !validCedula ||
+        !validTelefono
 
       ) {
         // Mostrar todos los mensajes de error al mismo tiempo
         setErrorNombres(validNombres ? "" : "Por favor ingresa nombres válidos.");
         setErrorApellidos(validApellidos ? "" : "Por favor ingresa apellidos válidos.");
-        setErrorEstatura(validEstatura ? "" : "Por favor ingresa una estatura válida.");
+        setErrorCorreo(validCorreo ? "" : "Por favor ingresa un correo válido.");
         setErrorCedula(validCedula ? "" : "Por favor ingresa una cédula ecuatoriana válida.");
         setErrorTelefono(validTelefono ? "" : "Por favor ingresa un número telefónico válido.");
-        setErrorCorreo(validCorreo ? "" : "Por favor ingresa un correo válido.");
-        setErrorPeso(validPeso ? "" : "Por favor ingresa un peso válido.");
-        setErrorTemperatura(validTemperatura ? "" : "Por favor ingresa una temperatura válida.");
-
         return;
       }
 
-      // Verificar si el paciente ya está registrado
-      const pacienteExistente = pacientes.find(paciente => paciente.cedula === formData.cedula);
-      if (pacienteExistente) {
-        setMensajeError("Este paciente ya se encuentra registrado");
+      // Verificar si el doctores ya está registrado
+      const doctoresExistente = doctores.find(doctores => doctores.cedula === formData.cedula);
+      if (doctoresExistente) {
+        setMensajeError("Este doctores ya se encuentra registrado");
         return;
       }
+      
+      const endpoint = selectedDoctor
+        ? `http://localhost:3001/auth/actualizar-doctores/${selectedDoctor._id}`
+        : "http://localhost:3001/auth/registro-doctores";
 
-      const endpoint = selectedPaciente
-        ? `http://localhost:3001/auth/actualizar-paciente/${selectedPaciente._id}`
-        : "http://localhost:3001/auth/registro-paciente";
-
-      const method = selectedPaciente ? "PUT" : "POST";
+      const method = selectedDoctor ? "PUT" : "POST";
 
       const response = await fetch(endpoint, {
         method,
@@ -250,17 +219,17 @@ export default function Lista_paciente() {
 
       if (response.ok) {
         console.log(
-          selectedPaciente
-            ? "Paciente actualizado exitosamente"
-            : "Paciente guardado exitosamente"
+          selectedDoctor
+            ? "doctores actualizado exitosamente"
+            : "doctores guardado exitosamente"
         );
-        fetchPacientes();
+        fetchDoctores();
         resetFormData();
         setMensajeError("");
         handleModalClose();
         handleUpdateModalClose();
       } else {
-        console.error("Error al guardar o actualizar el paciente");
+        console.error("Error al guardar o actualizar el doctor");
       }
     } catch (error) {
       console.error("Error de red", error);
@@ -268,15 +237,15 @@ export default function Lista_paciente() {
   };
 
 
-  const fetchPacientes = async () => {
+  const fetchDoctores = async () => {
     try {
-      const response = await fetch("http://localhost:3001/auth/lista-pacientes");
+      const response = await fetch("http://localhost:3001/auth/lista-doctores");
 
       if (response.ok) {
         const data = await response.json();
-        setPacientes(data);
+        setDoctores(data);
       } else {
-        console.error("Error al obtener la lista de pacientes");
+        console.error("Error al obtener la lista de doctores");
       }
     } catch (error) {
       console.error("Error de red", error);
@@ -288,18 +257,16 @@ export default function Lista_paciente() {
       fechaCreacion: new Date().toLocaleDateString(),
       nombres: "",
       apellidos: "",
-      fechaNacimiento: "",
-      estatura: 0,
       cedula: "",
+      fechaNacimiento: "",
       telefono: "",
-      correo:"",
-      peso: 0,
-      temperatura: 0,
+      correo: "",
+      especialidad: "",
     });
   };
 
   useEffect(() => {
-    fetchPacientes();
+    fetchDoctores();
   }, []);
 
   // Cambiar de página
@@ -311,42 +278,42 @@ export default function Lista_paciente() {
       <div className="listaP">
         <div className="ContainerSide">
           <div className="Contenido">
-            <h2 style={{ textAlign: "center" }}>Lista de pacientes</h2>
+            <h2 style={{ textAlign: "center" }}>Lista de doctores</h2>
             <div className="buscador d-flex justify-content-between align-items-center">
-              <button id="btnAddPaciente" onClick={handleModalOpen}>
-                Añadir paciente
+              <button id="btnAddDoctor" onClick={handleModalOpen}>
+                Añadir doctor
               </button>
               {/* Barra de búsqueda */}
               <input
                 className="barraBusqueda"
                 type="text"
-                placeholder="     Buscar pacientes..."
+                placeholder="     Buscar doctores..."
                 value={searchTerm}
                 onChange={handleSearchTermChange}
               />
             </div>
 
-            <table className="tabla_pacientes">
+            <table className="tabla_doctores">
               <thead>
                 <tr>
                   <th>Nombres y Apellidos</th>
                   <th>Fecha de creación</th>
-                  <th>Diagnóstico</th>
+                  <th>Especialidad</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                {/* Mostrar pacientes filtrados */}
-                {currentPacientes.map((paciente) => (
-                  <tr key={paciente._id}>
-                    <td>{`${paciente.nombres} ${paciente.apellidos}`}</td>
-                    <td>{`${paciente.fechaCreacion}`}</td>
-                    <td><p>Paciente resgistrado</p></td>
+                {/* Mostrar doctores filtrados */}
+                {currentDoctores.map((doctores) => (
+                  <tr key={doctores._id}>
+                    <td>{`${doctores.nombres} ${doctores.apellidos}`}</td>
+                    <td>{`${doctores.fechaCreacion}`}</td>
+                    <td>{`${doctores.especialidad}`}</td>
                     <td>
-                      <Link to={`/historial-paciente/${paciente._id}`}>
-                        <button id="btn1">Ver Paciente</button>
+                      <Link to={`/historial-doctores/${doctores._id}`}>
+                        <button id="btn1">Ver doctores</button>
                       </Link>
-                      <button id="btnActualizarHistorial" onClick={() => handleUpdateModalOpen(paciente)}>
+                      <button id="btnActualizarDoctor" onClick={() => handleUpdateModalOpen(doctores)}>
                         Actualizar
                       </button>
                     </td>
@@ -355,7 +322,7 @@ export default function Lista_paciente() {
               </tbody>
             </table>
             {/* Paginación */}
-            {filteredPacientes.length > itemsPerPage && (
+            {filteredDoctores.length > itemsPerPage && (
               <div className="pagination">
                 <button
                   className="btnAtras"
@@ -368,7 +335,7 @@ export default function Lista_paciente() {
                   className="btnSiguiente"
                   onClick={() => paginate(currentPage + 1)}
                   disabled={
-                    currentPage === Math.ceil(filteredPacientes.length / itemsPerPage)
+                    currentPage === Math.ceil(filteredDoctores.length / itemsPerPage)
                   }
                 >
                   Next
@@ -379,7 +346,7 @@ export default function Lista_paciente() {
           </div>
         </div>
 
-        {/* Modal registrar paciente */}
+        {/* Modal registrar doctores */}
         <ModalRegistro
           showModal={showModal}
           handleModalClose={handleModalClose}
@@ -387,40 +354,32 @@ export default function Lista_paciente() {
           handleInputChange={handleInputChange}
           errorNombres={errorNombres}
           errorApellidos={errorApellidos}
-          errorEstatura={errorEstatura}
           errorCedula={errorCedula}
           errorTelefono={errorTelefono}
           errorCorreo={errorCorreo}
-          errorPeso={errorPeso}
-          errorTemperatura={errorTemperatura}
           validarNombresCompletos={validarNombresCompletos}
           validarApellidosCompletos={validarApellidosCompletos}
-          validarEstatura={validarEstatura}
+          validarCorreo={validarCorreo}
           validarCedulaEcuatoriana={validarCedulaEcuatoriana}
           validarNumeroTelefonico={validarNumeroTelefonico}
-          validarCorreo={validarCorreo}
-          validarPeso={validarPeso}
-          validarTemperatura={validarTemperatura}
           handleGuardar={handleGuardar}
           mensajeError={mensajeError}
         />
 
-        {/* Modal actualizar paciente */}
+        {/* Modal actualizar doctores */}
         <ModalUpdate
           showUpdateModal={showUpdateModal}
           handleUpdateModalClose={handleUpdateModalClose}
           formData={formData}
           handleInputChange={handleInputChange}
-          errorEstatura={errorEstatura}
-          errorTelefono={errorTelefono}
           errorCorreo={errorCorreo}
-          errorPeso={errorPeso}
-          errorTemperatura={errorTemperatura}
-          validarEstatura={validarEstatura}
+          errorTelefono={errorTelefono}
+          errorNombres={errorNombres}
+          errorApellidos={errorApellidos}
           validarNumeroTelefonico={validarNumeroTelefonico}
+          validarNombresCompletos={validarNombresCompletos}
+          validarApellidosCompletos={validarApellidosCompletos}
           validarCorreo={validarCorreo}
-          validarPeso={validarPeso}
-          validarTemperatura={validarTemperatura}
           handleGuardarUpdate={handleGuardarUpdate}
         />
       </div>

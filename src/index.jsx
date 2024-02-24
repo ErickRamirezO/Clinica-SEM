@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./routes/Login/Login";
 import Lista_paciente from "./routes/Lista_paciente/Lista_paciente";
-import ListaDoctores from "./routes/ListaDoctores/ListaDoctores";
+import ListaDoctores from "./routes/ListaDoctores/Lista_doctores";
 import Chat from "./routes/Chat/Chat";
 import ErrorPage from "./routes/Error/Error";
 import "./index.css";

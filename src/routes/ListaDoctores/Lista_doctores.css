@@ -1,0 +1,150 @@
+.listaP {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #1d2f4c;
+    width: 100%;
+    height: 100%;
+}
+
+.barraBusqueda {
+    border-radius: 10px;
+    width: 300px;
+    transition: transform 0.3s ease;
+    /* Agregamos una transición suave al zoom */
+}
+
+.barraBusqueda:hover {
+    transform: scale(1.1);
+    /* Aquí puedes ajustar el nivel de zoom cambiando el valor */
+
+}
+
+
+/*Contenido*/
+.Contenido {
+    width: 100%;
+    flex: 1;
+    padding: 20px;
+    background-color: #1d2f4c;
+}
+
+h2 {
+    color: white;
+}
+
+.tabla_doctores {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.tabla_doctores th,
+td {
+    padding: 12px;
+    text-align: center;
+    /* Centra el contenido en las celdas */
+    border-bottom: 1px solid #ddd;
+    color: white;
+}
+
+.tabla_doctores th {
+    background-color: #184690;
+    color: white;
+}
+
+/* Ajusta el ancho de la columna 4 */
+.tabla_doctores td:last-child {
+    width: 1%;
+    white-space: nowrap;
+}
+
+/* Ajusta el ancho de la columna 2 (Fecha y última historial clínica) */
+.tabla_doctores td:nth-child(2) {
+    width: 30%;
+    white-space: nowrap;
+}
+
+/* Ajusta el ancho de la columna 3 (Diagnostico) */
+.tabla_doctores td:nth-child(3) {
+    width: 20%;
+    white-space: nowrap;
+}
+
+button {
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+#btn1 {
+    background-color: limegreen;
+    color: white;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+    /* Agregamos una transición suave al zoom */
+}
+
+#btnAddDoctor,
+#btnActualizarDoctor {
+    background-color: #184690;
+    color: white;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+    /* Agregamos una transición suave al zoom */
+}
+
+/* Al pasar el cursor sobre los botones, aplicamos un efecto de escala */
+#btn1:hover,
+#btnAddDoctor:hover,
+#btnActualizarDoctor:hover {
+    transform: scale(1.1);
+    /* Aquí puedes ajustar el nivel de zoom cambiando el valor */
+}
+
+.tabla_doctores button:hover {
+    background-color: #365899;
+}
+
+
+.ErrorPacienteExistente {
+    background-color: #f8d7da;
+    /* Color de fondo */
+    color: #721c24;
+    /* Color de texto */
+    border: 1px solid #f5c6cb;
+    /* Borde */
+    padding: 10px;
+    /* Espaciado interno */
+    border-radius: 5px;
+    /* Borde redondeado */
+    margin-top: 10px;
+    /* Espaciado superior */
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.btnAtras {
+    background-color: #721c24;
+    color: white;
+    border-radius: 10px;
+}
+
+.btnSiguiente {
+    background-color: green;
+    color: white;
+    border-radius: 10px;
+}
+
+
+/*--------------------------------------MODAL*/
+.pError {
+    font-size: 11px;
+    height: 0px;
+    color: #b4a37e;
+}

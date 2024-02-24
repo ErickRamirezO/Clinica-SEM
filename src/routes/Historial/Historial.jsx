@@ -13,6 +13,8 @@ const Historial = () => {
     const [prevId, setPrevId] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [foto, setFoto] = useState(null);
+    const [fechaBusqueda, setFechaBusqueda] = useState("");
+
 
     const handleModalOpen = () => {
         setShowModal(true);
@@ -92,7 +94,6 @@ const Historial = () => {
     }, [paciente]);
 
 
-
     if (!paciente) {
         return <p>Cargando...</p>;
     }
@@ -136,6 +137,10 @@ const Historial = () => {
                                         <tr>
                                             <td className="autoTam">{`${paciente.nombres} ${paciente.apellidos}`}</td>
                                         </tr>
+                                        <tr>
+                                            <td className="autoTam">{paciente.correo}</td>
+                                        </tr>
+                                        <tr></tr>
                                         <tr>
                                             <td className="autoTam">{formattedFechaNacimiento}</td>
                                         </tr>
@@ -187,16 +192,10 @@ const Historial = () => {
                     </div>
                 </div>
                 <div className="ContenedorHistorialDer">
-                    <h6>HISTORIAL</h6>
+                <h6>HISTORIAL</h6>
                     <div className="buscadores">
                         <div className="iconoMas" >
                             <FontAwesomeIcon icon={faPlus} onClick={() => handleModalOpen()} />
-                        </div>
-                        <div className="searchFecha">
-                            <input type="date" />
-                        </div>
-                        <div className="searchBarra">
-                            <input type="text" placeholder="Buscar..." />
                         </div>
                     </div>
                     <div className="info2">
@@ -207,6 +206,9 @@ const Historial = () => {
                                 </div>
                                 <div className="doctorHistorial">
                                     <p>Doctor encargado: {historial.doctor}</p>
+                                </div>
+                                <div className="especialidadHistorial">
+                                    <p>Especialidad: {historial.especialidad}</p>
                                 </div>
                                 <div className="diagnosticoHistorial">
                                     <p>Diagnóstico: {historial.diagnostico}</p>

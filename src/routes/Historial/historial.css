@@ -125,27 +125,28 @@
 /*------------------------------------------------Historiales*/
 
 .buscadores {
-    display: flex;
-    flex-direction: row;
     margin-bottom: 10px;
     margin-top: 10px;
-}
-
-.searchFecha {
-    margin-left: 180px;
-    /* Añade esta línea para alinear al borde izquierdo */
-    margin-right: 50px;
-    /* Puedes ajustar este valor según el espaciado que desees */
+    align-items: start;
+    text-align: start;
+    width: 100%;
 }
 
 
 .iconoMas {
-    color: green;
+    color: white;
     font-size: 20px;
     font-weight: bold;
-    margin-right: 10px;
-    margin-left: 0px;
-    /* Añade esta línea para alinear al borde izquierdo */
+    background-color: #061828;
+    width: 40px;
+    text-align: center;
+    border-radius: 50%;
+    transition: transform 0.2s;
+}
+
+.iconoMas:hover {
+    transform: scale(1.2); 
+    color: bisque;
 }
 
 
@@ -203,3 +204,6 @@
 .receta {
     height: 30px;
 }
+
+
+

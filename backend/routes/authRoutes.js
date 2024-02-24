@@ -3,7 +3,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Paciente = require('../models/Paciente');
-const Historial = require('../models/Historial')
+const Historial = require('../models/Historial');
+const Doctor = require('../models/Doctor');
 
 
 const router = express.Router();
@@ -120,6 +121,7 @@ router.post('/registro-paciente', async (req, res) => {
       estatura,
       cedula,
       telefono,
+      correo,
       peso,
       temperatura
     } = req.body;
@@ -132,6 +134,7 @@ router.post('/registro-paciente', async (req, res) => {
       estatura,
       cedula,
       telefono,
+      correo,
       peso,
       temperatura
     });
@@ -150,31 +153,6 @@ router.get('/lista-pacientes', async (req, res) => {
     const pacientes = await Paciente.find();
 
     res.status(200).json(pacientes);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Ruta para obtener la lista de pacientes completa
-router.get('/pacientes/:id', async (req, res) => {
-  try {
-    const pacientes = await Paciente.find();
-
-    res.status(200).json(pacientes);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Ruta para obtener un paciente por su ID
-router.get('/paciente-historial/:id', async (req, res) => {
-  try {
-    const paciente = await Paciente.findById(req.params.id);
-    if (!paciente) {
-      return res.status(404).json({ error: 'Paciente no encontrado' });
-    }
-
-    res.status(200).json(paciente);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -207,6 +185,7 @@ router.post('/guardar-historial', async (req, res) => {
       paciente,
       cedula,
       doctor,
+      especialidad,
       diagnostico,
       receta,
       alergias,
@@ -217,6 +196,7 @@ router.post('/guardar-historial', async (req, res) => {
       paciente,
       cedula,
       doctor,
+      especialidad,
       diagnostico,
       receta,
       alergias,
@@ -225,6 +205,20 @@ router.post('/guardar-historial', async (req, res) => {
     await nuevoHistorial.save();
 
     res.status(201).json({ message: 'Paciente registrado exitosamente' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Ruta para obtener un paciente por su ID
+router.get('/paciente-historial/:id', async (req, res) => {
+  try {
+    const paciente = await Paciente.findById(req.params.id);
+    if (!paciente) {
+      return res.status(404).json({ error: 'Paciente no encontrado' });
+    }
+
+    res.status(200).json(paciente);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -247,7 +241,79 @@ router.get('/obtener-historiales/:cedula', async (req, res) => {
   }
 });
 
-//----------------------------------------------------------------------------------------------------------------------------
+// Ruta para obtener la lista de doctores por especialidad
+router.get('/doctores-especialidad/:especialidad', async (req, res) => {
+  try {
+      const { especialidad } = req.params;
+      const doctores = await Doctor.find({ especialidad });
 
+      res.status(200).json(doctores);
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
+
+
+//--------------------------------------------------------------------------------------------------DOCTORES
+// Ruta para registrar un nuevo doctor
+router.post('/registro-doctores', async (req, res) => {
+  try {
+    const {
+      fechaCreacion,
+      nombres,
+      apellidos,
+      cedula,
+      fechaNacimiento,
+      telefono,
+      correo,
+      especialidad,
+    } = req.body;
+
+    const nuevoDoctor = new Doctor({
+      fechaCreacion,
+      nombres,
+      apellidos,
+      cedula,
+      fechaNacimiento,
+      telefono,
+      correo,
+      especialidad,
+    });
+
+    await nuevoDoctor.save();
+
+    res.status(201).json({ message: 'Doctor registrado exitosamente' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Ruta para obtener la lista de doctores
+router.get('/lista-doctores', async (req, res) => {
+  try {
+    const doctores = await Doctor.find();
+
+    res.status(200).json(doctores);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+// Ruta para actualizar un doctor
+router.put('/actualizar-doctores/:id', async (req, res) => {
+  try {
+    const doctorId = req.params.id;
+    const updatedDoctor = req.body;
+
+    // Realiza la actualización en la base de datos
+    const result = await Doctor.findByIdAndUpdate(doctorId, updatedDoctor, { new: true });
+
+    res.json(result);
+  } catch (error) {
+    console.error('Error al actualizar Doctor:', error);
+    res.status(500).json({ error: 'Error al actualizar Doctor' });
+  }
+});
 
 module.exports = router;

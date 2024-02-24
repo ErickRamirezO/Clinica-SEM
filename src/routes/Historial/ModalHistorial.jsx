@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 
 const ModalHistorial = ({
@@ -8,13 +8,30 @@ const ModalHistorial = ({
 }) => {
     const [formValues, setFormValues] = useState({
         fechaCreacion: new Date().toLocaleDateString(),
-        paciente: "",
-        cedula: "",
+        paciente: `${paciente.nombres} ${paciente.apellidos}`,
+        cedula: paciente.cedula,
         doctor: "",
+        especialidad: "",
         diagnostico: "",
         receta: "",
         alergias: "",
     });
+
+    const [doctores, setDoctores] = useState([]);
+
+    const cargarDoctoresEspecialidad = async (especialidad) => {
+        try {
+            const response = await fetch(`http://localhost:3001/auth/doctores-especialidad/${especialidad}`);
+            if (response.ok) {
+                const data = await response.json();
+                setDoctores(data);
+            } else {
+                console.error('Error al obtener los doctores');
+            }
+        } catch (error) {
+            console.error('Error de red:', error);
+        }
+    };
 
     const handleInputChange = (e) => {
         setFormValues({
@@ -26,9 +43,10 @@ const ModalHistorial = ({
     const resetFormData = () => {
         setFormValues({
             fechaCreacion: new Date().toLocaleDateString(),
-            paciente: "",
-            cedula: "",
+            paciente: `${paciente.nombres} ${paciente.apellidos}`,
+            cedula: paciente.cedula,
             doctor: "",
+            especialidad: "",
             diagnostico: "",
             receta: "",
             alergias: "",
@@ -42,16 +60,7 @@ const ModalHistorial = ({
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    ...formValues,
-                    fechaCreacion: formValues.fechaCreacion,
-                    paciente: `${paciente.nombres} ${paciente.apellidos}`,
-                    cedula: paciente.cedula,
-                    doctor: formValues.doctor,
-                    diagnostico: formValues.diagnostico,
-                    receta: formValues.receta,
-                    alergias: formValues.alergias,
-                }),
+                body: JSON.stringify(formValues),
             });
             if (response.ok) {
                 // Si la respuesta es exitosa, cierra el modal
@@ -80,7 +89,6 @@ const ModalHistorial = ({
                                 type="text"
                                 className="form-control"
                                 name="paciente"
-                                placeholder="paciente"
                                 value={`${paciente.nombres} ${paciente.apellidos}`}
                                 readOnly
                             />
@@ -93,23 +101,45 @@ const ModalHistorial = ({
                                 type="text"
                                 className="form-control"
                                 name="cedula"
-                                placeholder="0400911899"
                                 value={paciente.cedula}
                                 readOnly
                             />
                         </div>
                     </div>
                     <div className="form-group row">
+                        <label className="col-sm-3 col-form-label">Especialidad</label>
+                        <div className="col-sm-9">
+                            <select
+                                className="form-control"
+                                name="especialidad"
+                                value={formValues.especialidad}
+                                onChange={(e) => {
+                                    handleInputChange(e);
+                                    cargarDoctoresEspecialidad(e.target.value);
+                                }}
+                            >
+                                <option value="">Selecciona una especialidad</option>
+                                <option value="Cardiología">Cardiología</option>
+                                <option value="Dermatología">Dermatología</option>
+                                <option value="Gastroenterología">Gastroenterología</option>
+                                <option value="Neurología">Neurología</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="form-group row">
                         <label className="col-sm-3 col-form-label">Doctor: </label>
                         <div className="col-sm-9">
-                            <input
-                                type="text"
+                            <select
                                 className="form-control"
                                 name="doctor"
-                                placeholder="doctor"
                                 value={formValues.doctor}
                                 onChange={handleInputChange}
-                            />
+                            >
+                                <option value="">Selecciona un doctor</option>
+                                {doctores.map((doctor) => (
+                                    <option key={doctor._id} value={doctor.nombre}>{doctor.nombres} {doctor.apellidos}</option>
+                                ))}
+                            </select>
                         </div>
                     </div>
                     <div className="form-group row">

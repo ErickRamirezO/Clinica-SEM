@@ -8,20 +8,14 @@ const ModalRegistro = ({
     handleInputChange,
     errorNombres,
     errorApellidos,
-    errorEstatura,
+    errorCorreo,
     errorCedula,
     errorTelefono,
-    errorCorreo,
-    errorPeso,
-    errorTemperatura,
     validarNombresCompletos,
     validarApellidosCompletos,
-    validarEstatura,
+    validarCorreo,
     validarCedulaEcuatoriana,
     validarNumeroTelefonico,
-    validarCorreo,
-    validarPeso,
-    validarTemperatura,
     handleGuardar,
     mensajeError,
 }) => {
@@ -82,18 +76,18 @@ const ModalRegistro = ({
                         </div>
                     </div>
                     <div className="form-group row">
-                        <label className="col-sm-3 col-form-label">Estatura (m):</label>
+                        <label className="col-sm-3 col-form-label">Correo electrónico:</label>
                         <div className="col-sm-9">
                             <input
-                                type="number"
+                                type="text"
                                 className="form-control"
-                                name="estatura"
-                                value={formData.estatura}
+                                name="correo"
+                                value={formData.correo}
                                 onChange={handleInputChange}
-                                placeholder="0.3 - 3.00"
+                                placeholder="example@gmail.com"
                             />
-                            {errorEstatura && !validarEstatura(formData.estatura) && (
-                                <p className="pError">Estatura no válida</p>
+                            {errorCorreo && !validarCorreo(formData.correo) && (
+                                <p className="pError">Correo inválido</p>
                             )}
                         </div>
                     </div>
@@ -130,53 +124,23 @@ const ModalRegistro = ({
                         </div>
                     </div>
                     <div className="form-group row">
-                        <label className="col-sm-3 col-form-label">Correo electrónico:</label>
+                        <label className="col-sm-3 col-form-label">Especialidad</label>
                         <div className="col-sm-9">
-                            <input
-                                type="text"
+                            <select
                                 className="form-control"
-                                name="correo"
-                                value={formData.correo}
+                                name="especialidad"
+                                value={formData.especialidad}
                                 onChange={handleInputChange}
-                                placeholder="example@gmail.com"
-                            />
-                            {errorCorreo && !validarCorreo(formData.correo) && (
-                                <p className="pError">Correo inválido</p>
-                            )}
+                            >
+                                <option value="">Selecciona una especialidad</option>
+                                <option value="Cardiología">Cardiología</option>
+                                <option value="Dermatología">Dermatología</option>
+                                <option value="Gastroenterología">Gastroenterología</option>
+                                <option value="Neurología">Neurología</option>
+                            </select>
                         </div>
                     </div>
-                    <div className="form-group row">
-                        <label className="col-sm-3 col-form-label">Peso (kg):</label>
-                        <div className="col-sm-9">
-                            <input
-                                type="number"
-                                className="form-control"
-                                name="peso"
-                                value={formData.peso}
-                                onChange={handleInputChange}
-                                placeholder="4 - 300"
-                            />
-                            {errorPeso && !validarPeso(formData.peso) && (
-                                <p className="pError">Ingrese un peso válido</p>
-                            )}
-                        </div>
-                    </div>
-                    <div className="form-group row">
-                        <label className="col-sm-3 col-form-label">Temperatura (°):</label>
-                        <div className="col-sm-9">
-                            <input
-                                type="number"
-                                className="form-control"
-                                name="temperatura"
-                                value={formData.temperatura}
-                                onChange={handleInputChange}
-                                placeholder="34 - 39"
-                            />
-                            {errorTemperatura && !validarTemperatura(formData.temperatura) && (
-                                <p className="pError">Ingreso inválido</p>
-                            )}
-                        </div>
-                    </div>
+
                 </form>
             </Modal.Body>
             <Modal.Footer>

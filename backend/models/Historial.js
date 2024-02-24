@@ -6,6 +6,7 @@ const historialSchema = new Schema({
     paciente: String,
     cedula: String,
     doctor: String,
+    especialidad: String,
     diagnostico: String,
     receta: String,
     alergias: String,

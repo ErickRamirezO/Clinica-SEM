@@ -8,13 +8,17 @@
 .logo-container {
   order: -1; /* Mueve la imagen al extremo izquierdo */
 }
-.search-bar{
-  width: 200px; /* Establece el ancho deseado para la barra de búsqueda */
+
+.user {
+  display: flex;
+  justify-content: flex-end;
 }
 
-.search-bar p{
+.user p{
   color: white;
+  font-size: 12px;
 }
+
 /* Estilos para el SideNav */
 .sidenav {
   display: flex;

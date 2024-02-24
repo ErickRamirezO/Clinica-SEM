@@ -2,39 +2,27 @@ import React from "react";
 import { Modal, Button } from "react-bootstrap";
 
 const ModalRegistro = ({
-    showModal,
-    handleModalClose,
+    showUpdateModal,
+    handleUpdateModalClose,
     formData,
     handleInputChange,
+    errorCorreo,
+    errorTelefono,
     errorNombres,
     errorApellidos,
-    errorEstatura,
-    errorCedula,
-    errorTelefono,
-    errorCorreo,
-    errorPeso,
-    errorTemperatura,
+    validarNumeroTelefonico,
     validarNombresCompletos,
     validarApellidosCompletos,
-    validarEstatura,
-    validarCedulaEcuatoriana,
-    validarNumeroTelefonico,
     validarCorreo,
-    validarPeso,
-    validarTemperatura,
-    handleGuardar,
-    mensajeError,
+    handleGuardarUpdate,
 }) => {
     return (
-        <Modal show={showModal} onHide={handleModalClose} size="lg">
+        <Modal show={showUpdateModal} onHide={handleUpdateModalClose} size="lg">
             <Modal.Header>
-                <Modal.Title className="text-center mx-auto">Ingreso de datos</Modal.Title>
+                <Modal.Title className="text-center mx-auto">Actualización de datos</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
-                <div style={{ textAlign: "right", marginBottom: "20px" }}>
-                    <p name="fechaCreacion">{new Date().toLocaleDateString()}</p>
-                </div>
                 <form>
                     <div className="form-group row">
                         <label className="col-sm-3 col-form-label">Nombres Completos:</label>
@@ -45,7 +33,7 @@ const ModalRegistro = ({
                                 name="nombres"
                                 value={formData.nombres}
                                 onChange={handleInputChange}
-                                placeholder="nombre1 nombre2"
+
                             />
                             {errorNombres && !validarNombresCompletos(formData.nombres) && (
                                 <p className="pError">Formato de nombres incorrecto</p>
@@ -61,7 +49,7 @@ const ModalRegistro = ({
                                 name="apellidos"
                                 value={formData.apellidos}
                                 onChange={handleInputChange}
-                                placeholder="apellido1 apellido2"
+ 
                             />
                             {errorApellidos && !validarApellidosCompletos(formData.apellidos) && (
                                 <p className="pError">Formato de apellidos incorrecto</p>
@@ -76,57 +64,8 @@ const ModalRegistro = ({
                                 className="form-control"
                                 name="fechaNacimiento"
                                 value={formData.fechaNacimiento}
-                                onChange={handleInputChange}
-                                max={new Date().toISOString().split('T')[0]} // Establecer el valor máximo como la fecha actual
+                                readOnly
                             />
-                        </div>
-                    </div>
-                    <div className="form-group row">
-                        <label className="col-sm-3 col-form-label">Estatura (m):</label>
-                        <div className="col-sm-9">
-                            <input
-                                type="number"
-                                className="form-control"
-                                name="estatura"
-                                value={formData.estatura}
-                                onChange={handleInputChange}
-                                placeholder="0.3 - 3.00"
-                            />
-                            {errorEstatura && !validarEstatura(formData.estatura) && (
-                                <p className="pError">Estatura no válida</p>
-                            )}
-                        </div>
-                    </div>
-                    <div className="form-group row">
-                        <label className="col-sm-3 col-form-label">Cédula:</label>
-                        <div className="col-sm-9">
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="cedula"
-                                value={formData.cedula}
-                                onChange={handleInputChange}
-                                placeholder="0400911899"
-                            />
-                            {errorCedula && !validarCedulaEcuatoriana(formData.cedula) && (
-                                <p className="pError">Cédula incorrecta</p>
-                            )}
-                        </div>
-                    </div>
-                    <div className="form-group row">
-                        <label className="col-sm-3 col-form-label">Número Telefónico:</label>
-                        <div className="col-sm-9">
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="telefono"
-                                value={formData.telefono}
-                                onChange={handleInputChange}
-                                placeholder="0981515127"
-                            />
-                            {errorTelefono && !validarNumeroTelefonico(formData.telefono) && (
-                                <p className="pError">Número telefónico incorrecto</p>
-                            )}
                         </div>
                     </div>
                     <div className="form-group row">
@@ -146,54 +85,61 @@ const ModalRegistro = ({
                         </div>
                     </div>
                     <div className="form-group row">
-                        <label className="col-sm-3 col-form-label">Peso (kg):</label>
+                        <label className="col-sm-3 col-form-label">Cédula:</label>
                         <div className="col-sm-9">
                             <input
-                                type="number"
+                                type="text"
                                 className="form-control"
-                                name="peso"
-                                value={formData.peso}
-                                onChange={handleInputChange}
-                                placeholder="4 - 300"
+                                name="cedula"
+                                value={formData.cedula}
+                                readOnly
                             />
-                            {errorPeso && !validarPeso(formData.peso) && (
-                                <p className="pError">Ingrese un peso válido</p>
+                        </div>
+                    </div>
+                    <div className="form-group row">
+                        <label className="col-sm-3 col-form-label">
+                            Número Telefónico:
+                        </label>
+                        <div className="col-sm-9">
+                            <input
+                                type="text"
+                                className="form-control"
+                                name="telefono"
+                                value={formData.telefono}
+                                onChange={handleInputChange}
+                            />
+                            {errorTelefono && !validarNumeroTelefonico(formData.telefono) && (
+                                <p className="pError">Número telefónico incorrecto</p>
                             )}
                         </div>
                     </div>
                     <div className="form-group row">
-                        <label className="col-sm-3 col-form-label">Temperatura (°):</label>
+                        <label className="col-sm-3 col-form-label">Especialidad</label>
                         <div className="col-sm-9">
-                            <input
-                                type="number"
+                            <select
                                 className="form-control"
-                                name="temperatura"
-                                value={formData.temperatura}
+                                name="especialidad"
+                                value={formData.especialidad}
                                 onChange={handleInputChange}
-                                placeholder="34 - 39"
-                            />
-                            {errorTemperatura && !validarTemperatura(formData.temperatura) && (
-                                <p className="pError">Ingreso inválido</p>
-                            )}
+                            >
+                                <option value="">Selecciona una especialidad</option>
+                                <option value="Cardiología">Cardiología</option>
+                                <option value="Dermatología">Dermatología</option>
+                                <option value="Gastroenterología">Gastroenterología</option>
+                                <option value="Neurología">Neurología</option>
+                            </select>
                         </div>
                     </div>
                 </form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleModalClose}>
+                <Button variant="secondary" onClick={handleUpdateModalClose}>
                     Cerrar
                 </Button>
-                <Button variant="primary" onClick={handleGuardar}>
-                    Guardar
+                <Button variant="primary" onClick={handleGuardarUpdate}>
+                    Actualizar
                 </Button>
             </Modal.Footer>
-            <center>
-                <p className="ErrorPacienteExistente">
-                    {mensajeError && (
-                        <p style={{ color: "red", marginTop: "10px" }}>{mensajeError}</p>
-                    )}
-                </p>
-            </center>
         </Modal>
     );
 };
