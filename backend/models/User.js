@@ -5,6 +5,7 @@ const userSchema = new Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, default: 'user' }, // Agregar un campo para el rol
+  Ciudad: String,
   apellido: String,
   caPrincipal: String,
   caSecundaria: String,
@@ -16,9 +17,10 @@ const userSchema = new Schema({
   nombre: String,
   pais: String,
   sexo: String,
-  telefono: String
+  telefono: String,
+  img_perfil: String
 }, { collection: 'Personas' });
 
-const User = mongoose.model('user', userSchema);
+const User = mongoose.model('Personas', userSchema);
 
 module.exports = User;

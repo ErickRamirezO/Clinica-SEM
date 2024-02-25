@@ -102,7 +102,7 @@ router.post('/login', async (req, res) => {
     // ...
 
     // Responde con un mensaje de éxito
-    res.status(200).json({ message: 'Inicio de sesión exitoso' });
+    res.status(200).json({ message: 'Inicio de sesión exitoso', userId: user._id });
   } catch (error) {
     console.error('Error al iniciar sesión:', error);
     res.status(500).json({ message: 'Error interno del servidor' });

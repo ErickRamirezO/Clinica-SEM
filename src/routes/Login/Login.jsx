@@ -33,6 +33,9 @@ export default function Login() {
       });
 
       if (response.ok) {
+        const userData = await response.json();
+        const userId = userData.userId; // Obtener el ID del usuario desde la respuesta JSON
+
         // Si la solicitud es exitosa, redirige a la página deseada
         await MySwal.fire({
           icon: 'success',
@@ -41,7 +44,7 @@ export default function Login() {
           timer: 2000,
           showConfirmButton: false,
         });
-        navigate('/mi-perfil');
+        navigate(`/mi-perfil/${userId}`);
       } else {
         MySwal.fire({
           icon: 'error',
@@ -78,7 +81,7 @@ export default function Login() {
       console.error("Error al iniciar sesión con GitHub:", error);
     } else {
       // Success
-      navigate('/lista-de-pacientes');
+      navigate(`/mi-perfil/${userId}`);
       return;
     }
   }

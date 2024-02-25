@@ -2,73 +2,67 @@
 import React , { useState, useEffect }from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./Registro.css";
+import axios from 'axios';
 
 export default function Registro() {
+  const [password, setPassword] = useState();
+  const [username, setUsername] = useState();
+  const [role, setRole] = useState();
+  const [ciudad, setCiudad] = useState();
+  const [apellido, setApellido] = useState();
+  const [calleP, setCalleP] = useState();
+  const [calleS, setCalleS] = useState();
+  const [cedula, setCedula] = useState();
+  const [email, setEmail] = useState();
+  const [direccion, setDireccion] = useState();
+  const [especialidad, setEspecialidad] = useState();
+  const [fechaNac, setFechaNac] = useState();
+  const [nombre, setNombre] = useState();
+  const [pais, setPais] = useState();
+  const [sexo, setSexo] = useState();
+  const [movil, setMovil] = useState();
+  const [img_perfil, setImg] = useState("");
+  
+  
 
-  const [apellido, setApellido] = useState("");
-  const [nombre, setNombre] = useState("");
-  const [fechaNac, setFechaNac] = useState("");
-  const [sexo, setSexo] = useState("");
-  const [email, setEmail] = useState("");
-  const [movil, setMovil] = useState("");
-  const [cedula, setCedula] = useState("");
-  const [usuario, setUsuario] = useState("");
-  const [especialidad, setEspecialidad] = useState("");
-  const [direccion, setDireccion] = useState("");
-  const [pais, setPais] = useState("");
-  const [ciudad, setCiudad] = useState("");
-  const [calleP, setCalleP] = useState("");
-  const [calleS, setCalleS] = useState("");
-
-
-  const [userData, setUserData] = useState({
-    username: "",
-    password: "",
-    role:"",
-    Ciudad:"",
-    apellido:"",
-    caPrincipal:"",
-    caSecundaria:"",
-    cedula:"",
-    correo:"",
-    direccion:"",
-    especialidad:"",
-    nacimiento:"",
-    nombre:"",
-    pais:"",
-    sexo:"",
-    telefono:"",
-
-
-    
-    // Otros campos de datos
-  });
-
-  const handleChange = (e) => {
-    setUserData({ ...userData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit= (e)=>{
     e.preventDefault();
-    try {
-      const response = await fetch("/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
-      if (response.ok) {
-        console.log("Usuario registrado exitosamente");
-        // Aquí podrías redirigir al usuario a otra página o mostrar un mensaje de éxito
-      } else {
-        console.error("Error al registrar usuario");
-        // Aquí podrías manejar errores de registro, como mostrar un mensaje de error al usuario
-      }
-    } catch (error) {
-      console.error("Error:", error);
+    axios.post("http://localhost:3001/crearP",{
+      password, 
+      username, 
+      role, 
+      ciudad, 
+      apellido, 
+      calleP, 
+      calleS, 
+      cedula, 
+      email,
+      direccion, 
+      especialidad, 
+      fechaNac, 
+      nombre, 
+      pais, 
+      sexo,
+      movil, 
+      img_perfil
+ 
+    })
+    .then(result=>console.log(result))
+    .catch(err=>console.log(err))
+  }
+
+  function imagenConv(e){
+    console.log(e);
+    var reader= new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+    reader.onload=() => {
+      console.log(reader.result);
+      setImg(reader.result);
+    };
+    reader.onerror=error=>{
+      conole.log(" Erro", error);
     }
-  };
+  }
 
   return (
     
@@ -116,8 +110,8 @@ export default function Registro() {
                 <input type="text" id="cedula" name="cedula" value={cedula} onChange={(e) => setCedula(e.target.value)} />
               </td>
               <td>
-                <label htmlFor="usuario">Tipo de Usuario:</label>
-                <input type="text" id="usuario" name="usuario" value={usuario} onChange={(e) => setUsuario(e.target.value)} />
+                <label htmlFor="role">Tipo de Usuario:</label>
+                <input type="text" id="role" name="role" value={role} onChange={(e) => setRole(e.target.value)} />
               </td>
             </tr>
             <tr>
@@ -125,6 +119,18 @@ export default function Registro() {
                 <label htmlFor="especialidad">Especialidad:</label>
                 <input type="text" id="especialidad" name="especialidad" value={especialidad} onChange={(e) => setEspecialidad(e.target.value)} />
               </td>
+              <td>
+                <label htmlFor="username">Usuario:</label>
+                <input type="text" id="usuario" name="usuario" value={username} onChange={(e) => setUsername(e.target.value)} />
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <label htmlFor="password">Contraseña:</label>
+                <input type="text" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+              </td>
+              
             </tr>
           </table>
           <h2 className="TitulosR"> &nbsp; &nbsp; Información Demográfica</h2>
@@ -158,157 +164,19 @@ export default function Registro() {
           </table>
           <button type="submit">Enviar</button>
 
-        <table className="datosRegistrar">
-          <tr>
-            <td classname="Nuevo">
-              {" "}
-              <label for="apellido">Apellido:</label>
-            </td>
-            <td>
-              <label for="nombre">Nombre:</label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {" "}
-              <input type="text" id="apellido" name="apellido" value={userData.apellido}  onChange={handleChange} />
-            </td>
-            <td>
-              {/* Aquí van tus inputs para los datos del usuario */}
-          <input
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Nombre de usuario"
-            value={userData.nombre}
-            onChange={handleChange}
-          />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {" "}
-              <label for="fechaNac">Feha de Nacimiento:</label>
-            </td>
-            <td>
-              <label for="sexo">Sexo:</label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {" "}
-              <input type="text" id="fechaNac" name="fechaNac"  value={userData.nacimiento}   onChange={handleChange}/>
-            </td>
-            <td>
-              <input type="text" id="sexo" name="sexo" value={userData.sexo}  onChange={handleChange} />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {" "}
-              <label for="email">Email:</label>
-            </td>
-            <td>
-              <label for="movil">Teléfono movil:</label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {" "}
-              <input type="text" id="email" name="email" value={userData.correo}     onChange={handleChange} />
-            </td>
-            <td>
-              <input type="text" id="movil" name="movil" value={userData.telefono}   onChange={handleChange} />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {" "}
-              <label for="cedula">Cedula:</label>
-            </td>
-            <td>
-              <label for="usuario">Tipo de Usuario:</label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {" "}
-              <input type="text" id="cedula" name="cedula" value={userData.cedula}   onChange={handleChange} />
-            </td>
-            <td>
-              <input type="text" id="usuario" name="usuario" value={userData.username}   onChange={handleChange} />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {" "}
-              <label for="especialidad">Especialidad:</label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {" "}
-              <input type="text" id="especialidad" name="especialidad" />
-            </td>
-          </tr>
-        </table>
-        <h2 className="TitulosR"> &nbsp; &nbsp; Información Demografica</h2>
-        <table className="datosRegistrar">
-          <tr>
-            <td classname="Nuevo">
-              {" "}
-              <label for="direccion">Dirección:</label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {" "}
-              <input type="text" id="direccion" name="direccion" />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {" "}
-              <label for="pais">País:</label>
-            </td>
-            <td>
-              <label for="ciudad">Ciudad:</label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {" "}
-              <input type="text" id="pais" name="pais" />
-            </td>
-            <td>
-              <input type="text" id="ciudad" name="ciudad" />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {" "}
-              <label for="CalleP">Calle principal:</label>
-            </td>
-            <td>
-              <label for="CalleS">Calle Secundaria:</label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {" "}
-              <input type="text" id="CalleP" name="CalleP" />
-            </td>
-            <td>
-              <input type="text" id="CalleS" name="CalleS" />
-            </td>
-          </tr>
-        </table>
-        <button type="submit">Registrar</button>
-
+        
         </form>
       </div>
       <div className="contenedorDatosDer">
-        <img src="/usuari.png" alt="Usuario" />
+        <div className="img">
+        {img_perfil&& <img src={img_perfil} alt="Usuario" />}
+        </div>
+        <div className="carga">
+        {/* Input para seleccionar la imagen */}
+        <input accept="image/*" type="file" onChange={imagenConv} />
+           
+        </div>
+           
       </div>
       
     </div>

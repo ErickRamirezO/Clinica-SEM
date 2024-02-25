@@ -42,7 +42,7 @@ const router = createBrowserRouter([
     element: <Registro />,
   },
   {
-    path: "/mi-perfil",
+    path: "/mi-perfil/:id",
     element: <MiPerfil />,
   },
   {

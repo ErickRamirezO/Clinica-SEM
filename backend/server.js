@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
+const User = require('./models/User')
 require('dotenv').config({ path: '../.env' });
 
 const app = express();
@@ -33,3 +34,17 @@ app.use('/auth', authRoutes);
 app.listen(PORT, () => {
   console.log(`Servidor en ejecución en http://localhost:${PORT}`);
 });
+
+//Insertar un registro de persona
+app.post('/crearP',(req,res )=>{
+  User.create(req.body).then(users=>res.json(users))
+  .catch(err=> res.json(err))
+})
+
+//mostrar los registros
+app.get('/getUser/:id',(req,res)=>{
+  const id= req.params.id;
+  User.findById({_id:id})
+  .then(users => res.json(users))
+  .catch(err=>res.json(err))
+})
