@@ -6,15 +6,11 @@ import axios from 'axios';
 import {  faCamera } from "@fortawesome/free-solid-svg-icons";
 import Layout from "../../components/Navbar/Navbar";
 import { useParams } from "react-router";
-import { useNavigate } from 'react-router-dom';
-
-
-export default function Registro() {
-  const navigate = useNavigate();
+export default function RegistroN() {
   const {id}=useParams();
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [role, setRole] = useState("Paciente");
+  const [role, setRole] = useState("");
   const [Ciudad, setCiudad] = useState("");
   const [apellido, setApellido] = useState("");
   const [caPrincipal, setCalleP] = useState("");
@@ -54,11 +50,7 @@ export default function Registro() {
       img_perfil
  
     })
-    .then((result) => {
-      console.log(result);
-      // Redireccionar a la página de inicio de sesión después de un registro exitoso
-      navigate('/login');
-    })
+    .then(result=>console.log(result))
     .catch(err=>console.log(err))
   }
 
@@ -76,7 +68,7 @@ export default function Registro() {
   }
 
   return (
-
+    <Layout>
     <div className="contenedorDatos">
       <div className="">
 
@@ -121,22 +113,31 @@ export default function Registro() {
                 <input type="text" id="cedula" name="cedula" value={cedula} onChange={(e) => setCedula(e.target.value)} />
               </td>
               <td>
-                <label htmlFor="username">Usuario:</label>
-                <input type="text" id="usuario" name="usuario" value={username} onChange={(e) => setUsername(e.target.value)} />
-              </td> 
+                <label htmlFor="role">Tipo de Usuario:</label>
+                <select id="role" name="role" value={role} onChange={(e) => setRole(e.target.value)}>
+                  <option value="Administrador">Administrador</option>
+                  <option value="Doctor">Doctor</option>
+                  <option value="Paciente">Paciente</option>
+                </select>
+              </td>
 
             </tr>
             <tr>
-              
-              
               <td>
-                <label htmlFor="password">Contraseña:</label>
-                <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <label htmlFor="especialidad">Especialidad:</label>
+                <input type="text" id="especialidad" name="especialidad" value={especialidad} onChange={(e) => setEspecialidad(e.target.value)} />
+              </td>
+              <td>
+                <label htmlFor="username">Usuario:</label>
+                <input type="text" id="usuario" name="usuario" value={username} onChange={(e) => setUsername(e.target.value)} />
               </td>
             </tr>
 
             <tr>
-              
+              <td>
+                <label htmlFor="password">Contraseña:</label>
+                <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+              </td>
               
             </tr>
           </table>
@@ -183,14 +184,11 @@ export default function Registro() {
         <label htmlFor="fileUpload" className="icono-camara">
           <FontAwesomeIcon icon={faCamera} />
         </label>
-        <input id="fileUpload" accept="image/*" type="file" style={{ display: 'none' }} onChange={imagenConv} />
-
-           
-        </div>
-           
+        <input id="fileUpload" accept="image/*" type="file" style={{ display: 'none' }} onChange={imagenConv} />          
+        </div>      
       </div>
       
     </div>
-
+    </Layout>
   );
 }

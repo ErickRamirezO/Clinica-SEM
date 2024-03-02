@@ -1,8 +1,12 @@
 body {
     background-color: #061828;
+    width: 100%;
     height: 100%;
 }
 
+.Home{
+    
+}
 .btn-primary{
     background-color: #2d5391;
     border-color: #1d2f4c;

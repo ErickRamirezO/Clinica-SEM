@@ -1,5 +1,6 @@
-import React from "react";
+import React , { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
+import axios from "axios";
 
 const ModalRegistro = ({
     showModal,
@@ -24,7 +25,54 @@ const ModalRegistro = ({
     validarTemperatura,
     handleGuardar,
     mensajeError,
-}) => {
+    setFormData
+  }) => {
+    
+
+  const [usuarios, setUsuarios] = useState([]);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/getUser/`)
+      .then((result) => {
+        console.log("Datos obtenidos:", result.data);
+        setUsuarios(result.data); // Almacenar los usuarios en el estado
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+  }, []);
+
+  const handleUserSelect = (userId) => {
+    setSelectedUserId(userId);
+    // Verificar si la lista de usuarios se ha cargado correctamente
+    if (usuarios.length > 0) {
+      // Obtener los detalles del usuario seleccionado y establecerlos en los campos de entrada
+      const selectedUser = usuarios.find((user) => user._id === userId);
+      console.log("selectedUser:", selectedUser);
+      if (selectedUser) {
+        setFormData({
+          ...formData,
+          nombres: selectedUser.nombre,
+          apellidos: selectedUser.apellido,
+          fechaNacimiento: selectedUser.nacimiento,
+          cedula: selectedUser.cedula,
+          telefono: selectedUser.telefono,
+          correo: selectedUser.correo,
+          img:selectedUser.img_perfil
+        });
+        console.log("formData after update:", formData);
+      }
+    }
+  };
+    
+      
+      
+      
+
+
+
     return (
         <Modal show={showModal} onHide={handleModalClose} size="lg">
             <Modal.Header>
@@ -37,16 +85,48 @@ const ModalRegistro = ({
                 </div>
                 <form>
                     <div className="form-group row">
+                        
+                    <label className="col-sm-3 col-form-label">
+                    Seleccionar Paciente:
+                    </label>
+                    <div className="col-sm-9">
+                    <select
+                        name="TodosPacientes"
+                        id="topacientes"
+                        onChange={(e) => handleUserSelect(e.target.value)}
+                    >
+                        <option value="">Seleccionar usuario...</option>
+                        {usuarios.map((user) => (
+                        <option key={user._id} value={user._id}>
+                            {user.nombre} {user.apellido}
+                        </option>
+                        ))}
+                    </select>
+
+                    </div>
+                    </div>
+                    <div className="form-group row">
+                        
                         <label className="col-sm-3 col-form-label">Nombres Completos:</label>
                         <div className="col-sm-9">
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="nombres"
-                                value={formData.nombres}
-                                onChange={handleInputChange}
-                                placeholder="nombre1 nombre2"
-                            />
+                        
+                        <input
+                            type="text"
+                            className="form-control"
+                            name="nombres"
+                            value={formData.nombres} // Usar el estado del nombre aquí
+                            onChange={handleInputChange}
+                            placeholder="nombre1 nombre2"
+                        />
+
+                        <input
+                            type="text"
+                            className=" none"
+                            name="nombres"
+                            value={formData.img} // Usar el estado del nombre aquí
+                            onChange={handleInputChange}
+                            placeholder="nombre1 nombre2"
+                        />
                             {errorNombres && !validarNombresCompletos(formData.nombres) && (
                                 <p className="pError">Formato de nombres incorrecto</p>
                             )}
@@ -71,32 +151,18 @@ const ModalRegistro = ({
                     <div className="form-group row">
                         <label className="col-sm-3 col-form-label">Fecha de Nacimiento:</label>
                         <div className="col-sm-9">
+                            
                             <input
-                                type="date"
+                                type="text"
                                 className="form-control"
                                 name="fechaNacimiento"
                                 value={formData.fechaNacimiento}
                                 onChange={handleInputChange}
-                                max={new Date().toISOString().split('T')[0]} // Establecer el valor máximo como la fecha actual
+                                placeholder="apellido1 apellido2"
                             />
                         </div>
                     </div>
-                    <div className="form-group row">
-                        <label className="col-sm-3 col-form-label">Estatura (m):</label>
-                        <div className="col-sm-9">
-                            <input
-                                type="number"
-                                className="form-control"
-                                name="estatura"
-                                value={formData.estatura}
-                                onChange={handleInputChange}
-                                placeholder="0.3 - 3.00"
-                            />
-                            {errorEstatura && !validarEstatura(formData.estatura) && (
-                                <p className="pError">Estatura no válida</p>
-                            )}
-                        </div>
-                    </div>
+                    
                     <div className="form-group row">
                         <label className="col-sm-3 col-form-label">Cédula:</label>
                         <div className="col-sm-9">
@@ -158,6 +224,22 @@ const ModalRegistro = ({
                             />
                             {errorPeso && !validarPeso(formData.peso) && (
                                 <p className="pError">Ingrese un peso válido</p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="form-group row">
+                        <label className="col-sm-3 col-form-label">Estatura (m):</label>
+                        <div className="col-sm-9">
+                            <input
+                                type="number"
+                                className="form-control"
+                                name="estatura"
+                                value={formData.estatura}
+                                onChange={handleInputChange}
+                                placeholder="0.3 - 3.00"
+                            />
+                            {errorEstatura && !validarEstatura(formData.estatura) && (
+                                <p className="pError">Estatura no válida</p>
                             )}
                         </div>
                     </div>

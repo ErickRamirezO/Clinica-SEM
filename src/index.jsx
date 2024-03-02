@@ -8,6 +8,7 @@ import Chat from "./routes/Chat/Chat";
 import ErrorPage from "./routes/Error/Error";
 import "./index.css";
 import Registro from "./routes/Registro/Registro";
+import RegistroN from "./routes/Registro/RegistroN";
 import MiPerfil from "./routes/Registro/MiPerfil";
 import Historial from "./routes/Historial/Historial";
 import Inicio from "./routes/Inicio/Inicio";
@@ -26,15 +27,15 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/chat",
+    path: "/chat/:id",
     element: <Chat />,
   },
   {
-    path: "/lista-de-pacientes",
+    path: "/lista-de-pacientes/:id",
     element: <Lista_paciente />,
   },
   {
-    path: "/lista-de-doctores",
+    path: "/lista-de-doctores/:id",
     element: <ListaDoctores />,
   },
   {
@@ -42,11 +43,15 @@ const router = createBrowserRouter([
     element: <Registro />,
   },
   {
+    path: "/registrar/:id",
+    element: <RegistroN />,
+  },
+  {
     path: "/mi-perfil/:id",
     element: <MiPerfil />,
   },
   {
-    path: "/historial-paciente/:id",
+    path: "/historial-paciente/:id/:id",
     element: <Historial />,
   },
 

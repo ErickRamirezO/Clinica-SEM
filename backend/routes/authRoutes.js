@@ -123,7 +123,8 @@ router.post('/registro-paciente', async (req, res) => {
       telefono,
       correo,
       peso,
-      temperatura
+      temperatura,
+      img
     } = req.body;
 
     const nuevoPaciente = new Paciente({
@@ -136,7 +137,8 @@ router.post('/registro-paciente', async (req, res) => {
       telefono,
       correo,
       peso,
-      temperatura
+      temperatura,
+      img
     });
 
     await nuevoPaciente.save();

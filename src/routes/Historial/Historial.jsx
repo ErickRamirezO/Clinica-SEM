@@ -12,7 +12,6 @@ const Historial = () => {
     const [historiales, setHistoriales] = useState([]);
     const [prevId, setPrevId] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const [foto, setFoto] = useState(null);
     const [fechaBusqueda, setFechaBusqueda] = useState("");
 
 
@@ -24,16 +23,7 @@ const Historial = () => {
         setShowModal(false);
     };
 
-    const handleFotoChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setFoto(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
+
 
 
     useEffect(() => {
@@ -126,11 +116,8 @@ const Historial = () => {
                         <table className="maximo tablaSin">
                             <tr>
                                 <td className="autoTam">
-                                    <label htmlFor="fotoInput">
-                                        <FontAwesomeIcon icon={faCamera} />
-                                        <input id="fotoInput" type="file" accept="image/*" onChange={handleFotoChange} style={{ display: 'none' }} />
-                                    </label>
-                                    {foto && <img src={foto} alt="Foto de usuario" className="fotoUsuario" />}
+                                    
+                                {paciente.img && <img src={paciente.img} alt="Foto de usuario" className="fotoUsuario" />}
                                 </td>
                                 <td className="medio">
                                     <table className="maximo">

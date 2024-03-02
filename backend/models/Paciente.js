@@ -12,6 +12,7 @@ const pacienteSchema = new Schema({
     telefono: String,
     peso: Number,
     temperatura: Number,
+    img: String
 }, { collection: 'Pacientes' }); 
 
 const Paciente = mongoose.model('Pacientes', pacienteSchema);

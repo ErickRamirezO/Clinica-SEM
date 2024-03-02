@@ -119,7 +119,7 @@ export default function Login() {
                   Iniciar sesión con GitHub
                   <FontAwesomeIcon icon={faGithub} />
                 </button>
-                <Link to="/registro">
+                <Link to={`/registro`} >
                   <button>Registro</button>
                 </Link>
               </div>

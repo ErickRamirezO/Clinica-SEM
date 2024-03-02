@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Lista_paciente.css";
 import Layout from "../../components/Navbar/Navbar";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router";
 import {
   validarNombresCompletos,
   validarApellidosCompletos,
@@ -16,6 +17,7 @@ import ModalRegistro from "./ModalRegistro";
 import ModalUpdate from "./ModalUpdate";
 
 export default function Lista_paciente() {
+  const {id}=useParams();
   const [showModal, setShowModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -29,6 +31,7 @@ export default function Lista_paciente() {
     correo:"",
     peso: 0,
     temperatura: 0,
+    img:""
   });
 
   const [pacientes, setPacientes] = useState([]);
@@ -75,6 +78,7 @@ export default function Lista_paciente() {
     setErrorTelefono("");
     setErrorPeso("");
     setErrorTemperatura("");
+    setErrorImg("");
     setErrorCorreo("");
     setMensajeError("");
   };
@@ -109,13 +113,14 @@ export default function Lista_paciente() {
   };
 
   const handleInputChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
     setErrorTemperatura(!validarTemperatura(value));
-
   };
+  
 
   const handleGuardarUpdate = async () => {
     try {
@@ -295,6 +300,7 @@ export default function Lista_paciente() {
       correo:"",
       peso: 0,
       temperatura: 0,
+      img:""
     });
   };
 
@@ -343,7 +349,7 @@ export default function Lista_paciente() {
                     <td>{`${paciente.fechaCreacion}`}</td>
                     <td><p>Paciente resgistrado</p></td>
                     <td>
-                      <Link to={`/historial-paciente/${paciente._id}`}>
+                      <Link to={`/historial-paciente/${id}/${paciente._id}`}>
                         <button id="btn1">Ver Paciente</button>
                       </Link>
                       <button id="btnActualizarHistorial" onClick={() => handleUpdateModalOpen(paciente)}>
@@ -403,6 +409,7 @@ export default function Lista_paciente() {
           validarTemperatura={validarTemperatura}
           handleGuardar={handleGuardar}
           mensajeError={mensajeError}
+          setFormData={setFormData}
         />
 
         {/* Modal actualizar paciente */}
@@ -422,6 +429,7 @@ export default function Lista_paciente() {
           validarPeso={validarPeso}
           validarTemperatura={validarTemperatura}
           handleGuardarUpdate={handleGuardarUpdate}
+          setFormData={setFormData}
         />
       </div>
     </Layout>

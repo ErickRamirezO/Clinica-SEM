@@ -48,3 +48,10 @@ app.get('/getUser/:id',(req,res)=>{
   .then(users => res.json(users))
   .catch(err=>res.json(err))
 })
+
+// Mostrar todos los registros de usuarios
+app.get('/getUser', (req, res) => {
+  User.find({})
+    .then(users => res.json(users))
+    .catch(err => res.json(err))
+});

@@ -11,7 +11,7 @@ export default function HomePage() {
     const handleModalShow = () => setModalShow(true);
     const handleModalClose = () => setModalShow(false);
     return (
-        <div>
+        <div className="Home">
             {/* Navigation */}
             <Navbar className="colorNavar container" expand="lg">
                 <Navbar.Brand as={Link} to="/">
