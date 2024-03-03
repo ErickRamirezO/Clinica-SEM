@@ -61,9 +61,11 @@ function App() {
       element: <MiPerfil />
     },
     {
-      path: "/historial-paciente/:id/:id",
+      path: "/historial-paciente/:userId/:pacienteId",
       element: <Historial />
     }
+    
+    
   ]);
 
   const handleLogin = (user) => {

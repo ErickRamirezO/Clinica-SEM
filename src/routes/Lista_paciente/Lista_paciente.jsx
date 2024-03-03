@@ -15,9 +15,12 @@ import {
 } from "../../validate";
 import ModalRegistro from "./ModalRegistro";
 import ModalUpdate from "./ModalUpdate";
+import Modal_HistorialPaciente from "../Historial/Modal_HistorialPaciente";
+import Historial from "../Historial/Modal_HistorialPaciente";
+
 
 export default function Lista_paciente() {
-  const {id}=useParams();
+  const { id } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -28,10 +31,10 @@ export default function Lista_paciente() {
     estatura: 0,
     cedula: "",
     telefono: "",
-    correo:"",
+    correo: "",
     peso: 0,
     temperatura: 0,
-    img:""
+    img: ""
   });
 
   const [pacientes, setPacientes] = useState([]);
@@ -48,6 +51,18 @@ export default function Lista_paciente() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
+  const [showModalHistorial, setShowModalHistorial] = useState(false);
+
+
+  const handleModalOpenHistorial = (paciente) => {
+    setSelectedPaciente(paciente);
+    setShowModalHistorial(true);
+  };
+
+
+  const handleModalCloseHistorial = () => {
+    setShowModalHistorial(false);
+  };
 
   // Manejador de evento para actualizar el término de búsqueda
   const handleSearchTermChange = (e) => {
@@ -120,7 +135,7 @@ export default function Lista_paciente() {
     });
     setErrorTemperatura(!validarTemperatura(value));
   };
-  
+
 
   const handleGuardarUpdate = async () => {
     try {
@@ -297,10 +312,10 @@ export default function Lista_paciente() {
       estatura: 0,
       cedula: "",
       telefono: "",
-      correo:"",
+      correo: "",
       peso: 0,
       temperatura: 0,
-      img:""
+      img: ""
     });
   };
 
@@ -349,9 +364,8 @@ export default function Lista_paciente() {
                     <td>{`${paciente.fechaCreacion}`}</td>
                     <td><p>Paciente resgistrado</p></td>
                     <td>
-                      <Link to={`/historial-paciente/${id}/${paciente._id}`}>
-                        <button id="btn1">Ver Paciente</button>
-                      </Link>
+                      <button onClick={() => handleModalOpenHistorial(paciente)}>Ver Historial</button>
+
                       <button id="btnActualizarHistorial" onClick={() => handleUpdateModalOpen(paciente)}>
                         Actualizar
                       </button>
@@ -431,6 +445,14 @@ export default function Lista_paciente() {
           handleGuardarUpdate={handleGuardarUpdate}
           setFormData={setFormData}
         />
+
+        {/* Modal registrar paciente */}
+        <Modal_HistorialPaciente
+          showModalHistorial={showModalHistorial}
+          handleModalCloseHistorial={handleModalCloseHistorial}
+          paciente={selectedPaciente}
+        />
+
       </div>
     </Layout>
   );

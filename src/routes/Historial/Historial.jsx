@@ -3,17 +3,14 @@ import { useParams } from "react-router-dom";
 import "./historial.css";
 import Layout from "../../components/Navbar/Navbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRuler, faWeight, faThermometer, faPlus, faCamera } from "@fortawesome/free-solid-svg-icons";
+import { faRuler, faWeight, faThermometer, faPlus } from "@fortawesome/free-solid-svg-icons";
 import ModalHistorial from "./ModalHistorial";
 
 const Historial = () => {
-    const { id } = useParams();
+    const { userId, pacienteId } = useParams(); // Modificado para usar dos parámetros
     const [paciente, setPaciente] = useState(null);
     const [historiales, setHistoriales] = useState([]);
-    const [prevId, setPrevId] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const [fechaBusqueda, setFechaBusqueda] = useState("");
-
 
     const handleModalOpen = () => {
         setShowModal(true);
@@ -23,20 +20,14 @@ const Historial = () => {
         setShowModal(false);
     };
 
-
-
-
     useEffect(() => {
         const fetchPaciente = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/auth/paciente-historial/${id}`);
+                // Asegúrate de modificar la URL de tu API para utilizar pacienteId correctamente
+                const response = await fetch(`http://localhost:3001/auth/paciente-historial/${pacienteId}`);
                 if (response.ok) {
                     const data = await response.json();
-                    if (data !== null) {
-                        setPaciente(data);
-                    } else {
-                        console.error('Paciente no encontrado');
-                    }
+                    setPaciente(data);
                 } else {
                     console.error('Error al obtener el paciente');
                 }
@@ -45,49 +36,42 @@ const Historial = () => {
             }
         };
 
-        // Verificar si el ID ha cambiado antes de hacer la solicitud
-        if (id !== prevId) {
-            setPrevId(id);
+        if (pacienteId) {
             fetchPaciente();
         }
 
-        // Limpiar el estado del paciente cuando el ID cambie
-        return () => {
-            setPaciente(null);
-        };
-    }, [id, prevId]);
+        // No es necesario limpiar el estado del paciente en este caso
+    }, [pacienteId]); // Dependiendo solo de pacienteId
 
-    //obtenemos los historiales en base a la comparación de sus cédulas
     useEffect(() => {
         const fetchHistoriales = async () => {
-            try {
-                const response = await fetch(`http://localhost:3001/auth/obtener-historiales/${paciente.cedula}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data !== null) {
-                        const historialesPaciente = data.filter(historial => historial.cedula === paciente.cedula);
-                        setHistoriales(historialesPaciente);
+            // Asegúrate de que esta lógica sea correcta para tu aplicación
+            // Es posible que necesites ajustar la URL de tu API o la lógica de filtrado
+            if (paciente && paciente.cedula) {
+                try {
+                    const response = await fetch(`http://localhost:3001/auth/obtener-historiales/${paciente.cedula}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setHistoriales(data);
                     } else {
-                        console.error('No se encontraron historiales para el paciente');
+                        console.error('Error al obtener los historiales');
                     }
-                } else {
-                    console.error('Error al obtener los historiales');
+                } catch (error) {
+                    console.error('Error de red:', error);
                 }
-            } catch (error) {
-                console.error('Error de red:', error);
             }
         };
 
         if (paciente) {
             fetchHistoriales();
         }
-    }, [paciente]);
-
+    }, [paciente]); // Dependiendo del estado paciente
 
     if (!paciente) {
         return <p>Cargando...</p>;
     }
 
+    // La lógica para calcular la edad y formatear la fecha de nacimiento sigue igual
     const fechaNacimiento = new Date(paciente.fechaNacimiento);
     const formattedFechaNacimiento = `${fechaNacimiento.getDate()}, ${fechaNacimiento.toLocaleString('default', { month: 'long' })} ${fechaNacimiento.getFullYear()}`;
 
@@ -105,8 +89,6 @@ const Historial = () => {
     };
 
     const edad = calcularEdad(paciente.fechaNacimiento);
-
-
     return (
         <Layout>
             <div className="ContenedorHistorial">

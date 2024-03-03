@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faComments, faUserCircle, faSignOutAlt ,faAddressCard, faHistory} from '@fortawesome/free-solid-svg-icons';
+import { faUser, faComments, faUserCircle, faSignOutAlt, faAddressCard, faHistory } from '@fortawesome/free-solid-svg-icons';
 import { Navbar, Container, InputGroup } from 'react-bootstrap';
 import axios from 'axios';
 import "./Navbar.css";
@@ -30,23 +30,23 @@ const CustomNavbar = () => {
   return (
     <div className='Nav-n'>
       <Navbar bg="light" expand="lg" className="custom-navbar">
-      <Container fluid>
-        <Navbar.Brand className="logo-container">
-          
-          <img src="/logo2.png" className="img_nav_logo" alt="Logo de la empresa" />
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbar" />
-        <Navbar.Collapse id="navbar" className="justify-content-end">
-          <InputGroup className="user">
-            <Link to={`/mi-perfil/${id}`} className="sidenav-link">
-            {img_perfil && <img src={img_perfil} alt="Usuario" />}
-              <p>Mi perfil</p>
-            </Link>
-          </InputGroup>
-          <SideNav id={id} role={role} />
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+        <Container fluid>
+          <Navbar.Brand className="logo-container">
+
+            <img src="/logo2.png" className="img_nav_logo" alt="Logo de la empresa" />
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="navbar" />
+          <Navbar.Collapse id="navbar" className="justify-content-end">
+            <InputGroup className="user">
+              <Link to={`/mi-perfil/${id}`} className="sidenav-link">
+                {img_perfil && <img src={img_perfil} alt="Usuario" />}
+                <p>Mi perfil</p>
+              </Link>
+            </InputGroup>
+            <SideNav id={id} role={role} />
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
     </div>
   );
 };
@@ -72,37 +72,37 @@ const SideNav = ({ id, role }) => {
   return (
     <div className="sidenav">
       <div className='superior'>
-      {(role === 'Administrador' || role === 'Doctor') && (
-        <Link to={`/lista-de-pacientes/${id}`} className="sidenav-link ">
-          <FontAwesomeIcon icon={faUser} />
-          <p>Pacientes</p>
-        </Link>
-      )}
-          {(role === 'Administrador' || role === 'Paciente')  && (
-        <Link to={`/lista-de-doctores/${id}`} className="sidenav-link ">
-          <FontAwesomeIcon icon={faUser} />
-          <p>Doctores</p>
-        </Link>
-          )}
-           {(role === 'Doctor' || role === 'Paciente')  && (
-        <Link to={`/chat/${id}`} className="sidenav-link">
-          <FontAwesomeIcon icon={faComments} />
-          <p>Chat</p>
-        </Link>
-           )}
-        {( role === 'Paciente')  && (
-        <Link to={`/historial-paciente/${id}/${id}`} className="sidenav-link">
+        {(role === 'Administrador' || role === 'Doctor') && (
+          <Link to={`/lista-de-pacientes/${id}`} className="sidenav-link ">
+            <FontAwesomeIcon icon={faUser} />
+            <p>Pacientes</p>
+          </Link>
+        )}
+        {(role === 'Administrador' || role === 'Paciente') && (
+          <Link to={`/lista-de-doctores/${id}`} className="sidenav-link ">
+            <FontAwesomeIcon icon={faUser} />
+            <p>Doctores</p>
+          </Link>
+        )}
+        {(role === 'Doctor' || role === 'Paciente') && (
+          <Link to={`/chat/${id}`} className="sidenav-link">
+            <FontAwesomeIcon icon={faComments} />
+            <p>Chat</p>
+          </Link>
+        )}
+        {(role === 'Paciente') && (
+          <Link to={`/historial-paciente/${id}/${id}`} className="sidenav-link">
             <FontAwesomeIcon icon={faHistory} />
             <p>Historial</p>
           </Link>
         )}
 
-        { (role === 'Administrador' || role === 'Doctor')&& ( 
+        {(role === 'Administrador' || role === 'Doctor') && (
           <Link to={`/registrar/${id}`} className="sidenav-link">
             <FontAwesomeIcon icon={faAddressCard} />
             <p>Registrar</p>
           </Link>
-          
+
 
         )}
       </div>
@@ -119,11 +119,11 @@ const SideNav = ({ id, role }) => {
 
 const Layout = ({ children }) => {
   return (
-    
+
     <div className="layout">
       <CustomNavbar />
       <div className="content">
-        <SideNav/>
+        <SideNav />
         <div className="main">
           {children}
         </div>
