@@ -23,10 +23,6 @@ export default function Login(props) {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    axios
-      .post("http://localhost:3001/auth/login/chat-engine", { username, password })
-      .then((r) => props.onAuth({ ...r.data, password })) // NOTE: over-ride secret
-      .catch((e) => console.log(JSON.stringify(e.response.data)));
     // Enviar la solicitud de inicio de sesión al backend
     try {
       const response = await fetch("http://localhost:3001/auth/login", {
@@ -49,6 +45,10 @@ export default function Login(props) {
           timer: 2000,
           showConfirmButton: false,
         });
+        axios
+        .post("http://localhost:3001/auth/login/chat-engine", { username, password })
+        .then((r) => props.onAuth({ ...r.data, password })) // NOTE: over-ride secret
+        .catch((e) => console.log(JSON.stringify(e.response.data)));
         navigate(`/mi-perfil/${userId}`);
       } else {
         MySwal.fire({
