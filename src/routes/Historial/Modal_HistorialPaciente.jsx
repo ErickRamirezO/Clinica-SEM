@@ -69,7 +69,7 @@ const Modal_HistorialPaciente = ({
     const edad = calcularEdad(paciente.fechaNacimiento);
 
     return (
-        <Modal show={showModalHistorial} onHide={handleModalCloseHistorial} size="lg" className="ModalHistorialPaciente">
+        <Modal show={showModalHistorial} onHide={handleModalCloseHistorial} size="lg" className=" ModalHistorialPaciente">
             <Modal.Body>
                 <div className="ContenedorHistorial">
                     <div className="ContenedorHistorialIzq">
