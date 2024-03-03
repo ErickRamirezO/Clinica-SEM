@@ -1,7 +1,7 @@
 {
   "name": "react-javascript",
   "version": "1.0.0",
-  "type": "commonjs",
+  "type": "module",
   "description": "React TypeScript on Replit, using Vite bundler",
   "scripts": {
     "dev": "vite",
