@@ -12,6 +12,7 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(cors({ origin: true }));
 
 // Conexión a la base de datos
 const MONGODB_URI = process.env.MONGODB_URI;

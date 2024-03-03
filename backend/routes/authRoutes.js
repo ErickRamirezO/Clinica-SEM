@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
 const User = require('../models/User');
 const Paciente = require('../models/Paciente');
 const Historial = require('../models/Historial');
@@ -106,6 +107,26 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     console.error('Error al iniciar sesión:', error);
     res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
+
+
+//inicio sesion chat-engine
+router.post('/login/chat-engine', async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const r = await axios.get("https://api.chatengine.io/users/me/", {
+      headers: {
+        "Project-ID": "d003e5d0-9566-45cd-97a2-2e23bab076bd",
+        "User-Name": username,
+        "User-Secret": password,
+      },
+    });
+    return res.status(r.status).json(r.data);
+  } catch (e) {
+    console.error('Error al comunicarse con Chat Engine:', e);
+    return res.status(e.response.status).json(e.response.data);
   }
 });
 

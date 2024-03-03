@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub} from "@fortawesome/free-brands-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Swal from 'sweetalert2';
+import axios from 'axios';
 import withReactContent from 'sweetalert2-react-content';
 import "./Login.css";
 
@@ -14,7 +15,7 @@ const supabaseUrl = 'https://emhxsaqqpdeexvmipyzm.supabase.co';
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVtaHhzYXFxcGRlZXh2bWlweXptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDY1MzI3NTYsImV4cCI6MjAyMjEwODc1Nn0.H8-mEKh1DI4-jeLhpXr-mIb-Kzl6L7d36vecyvJllqY";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export default function Login() {
+export default function Login(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -22,6 +23,10 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    axios
+      .post("http://localhost:3001/auth/login/chat-engine", { username, password })
+      .then((r) => props.onAuth({ ...r.data, password })) // NOTE: over-ride secret
+      .catch((e) => console.log(JSON.stringify(e.response.data)));
     // Enviar la solicitud de inicio de sesión al backend
     try {
       const response = await fetch("http://localhost:3001/auth/login", {

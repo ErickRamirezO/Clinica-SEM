@@ -1,113 +1,50 @@
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserPlus, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import "./Chat.css";
+import { PrettyChatWindow } from "react-chat-engine-pretty";
 import Layout from "../../components/Navbar/Navbar";
+import "./Chat.css";
+import { useEffect } from 'react';
 
-export default function Chat() {
-  const [messages, setMessages] = useState([]);
-  const [inputMessage, setInputMessage] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const faUserPlusStyle = {
-    color: "#293c5e",
-    borderRadius: "10px",
-    border: "2px solid #306aa2",
-    padding: "8px",
-  };
-
-  const faPaperPlaneStyle = {
-    color: "#293c5e",
-    cursor: "pointer",
-  };
-
-  const handleSendMessage = () => {
-    if (inputMessage.trim() !== "") {
-      const newMessage = {
-        content: inputMessage,
-        time: new Date().toLocaleTimeString(),
-      };
-
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-      setInputMessage("");
-    }
-  };
-
-  const renderChatHistorial = () => {
-    if (searchTerm.trim() === "") {
-      return null; // No renderizar historial si no hay término de búsqueda
-    }
-
-    if (messages.length === 0) {
-      return <p>No hay mensajes en el historial</p>;
-    }
-
-    const lastMessage = messages[messages.length - 1];
-
+const Chat = (props) => {
+  // Verifica si props.user está definido antes de intentar acceder a sus propiedades
+  if (!props.user) {
     return (
-      <div className="chatHeaderPersona">
-        <div className="persona_id">{lastMessage.content.substring(0, 2)}</div>
-        <p>{lastMessage.content}</p>
-        <div className="hora">{lastMessage.time}</div>
-      </div>
+      <Layout>
+        <div>Cargando...</div> {/* O cualquier otro indicador de carga */}
+      </Layout>
     );
-  };
+  }
+  
+  useEffect(() => {
+    // Obtener todos los elementos con la clase ce-custom-header-subtitle
+    const statusElements = document.querySelectorAll(".ce-custom-header-subtitle");
+
+    // Iterar sobre los elementos y cambiar el color del texto según el contenido
+    statusElements.forEach(element => {
+      const status = element.textContent.trim();
+
+      if (status === "Online") {
+        element.style.setProperty('color', '#0ffc03', 'important');
+      } else if (status === "Offline") {
+        element.style.setProperty('color', 'red', 'important');
+      }
+    });
+  }, []); // Ejecutar solo una vez al montar el componente
+
+
+
+
 
   return (
     <Layout>
-    <div className="contenedorChat">
-      <div className="chatBuscador">
-        <div className="chatBuscadorHeader">
-          <form>
-            <input
-              type="text"
-              placeholder="Buscar"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </form>
-          <div className="faUserPlusIcon">
-            <FontAwesomeIcon
-              icon={faUserPlus}
-              size="2xl"
-              style={faUserPlusStyle}
-            />
-          </div>
-        </div>
-        <div className="chatHistorial">{renderChatHistorial()}</div>
+      <div style={{ height: "75vh" }}>
+        <PrettyChatWindow
+          projectId="d003e5d0-9566-45cd-97a2-2e23bab076bd"
+          username={props.user.username}
+          secret={props.user.password}
+          style={{ height: "100%" }}
+        />
       </div>
-      <div className="chat">
-        <div className="chatHeader">
-          <div className="chatHeaderPersona">
-            <div className="persona_id">JD</div>
-            <p>John Doe</p>
-          </div>
-        </div>
-        <div className="chatBody">
-          {messages.map((message, index) => (
-            <div key={index} className="chatMessage">
-              <div className="message">{message.content}</div>
-              <div className="hora">{message.time}</div>
-            </div>
-          ))}
-          <div className="chatMessageForm">
-            <input
-              type="text"
-              placeholder="Escribe un mensaje..."
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-            />
-            <FontAwesomeIcon
-              className="faPaperPlaneIcon"
-              icon={faPaperPlane}
-              size="lg"
-              style={faPaperPlaneStyle}
-              onClick={handleSendMessage}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
     </Layout>
   );
-}
+};
+
+export default Chat;
