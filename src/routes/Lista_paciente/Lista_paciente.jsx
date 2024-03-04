@@ -146,7 +146,7 @@ export default function Lista_paciente() {
       const validCorreo = validarCorreo(formData.correo);
       const validPeso = validarPeso(formData.peso);
       const validTemperatura = validarTemperatura(formData.temperatura);
-
+  
       // Verificar si hay algún error
       if (
         !validNombres ||
@@ -169,13 +169,13 @@ export default function Lista_paciente() {
         setErrorTemperatura(validTemperatura ? "" : "Por favor ingresa una temperatura válida.");
         return;
       }
-
+  
       const endpoint = selectedPaciente
         ? `http://localhost:3001/auth/actualizar-paciente/${selectedPaciente._id}`
         : "http://localhost:3001/auth/registro-paciente";
-
+  
       const method = selectedPaciente ? "PUT" : "POST";
-
+  
       const response = await fetch(endpoint, {
         method,
         headers: {
@@ -185,7 +185,7 @@ export default function Lista_paciente() {
           ...formData,
         }),
       });
-
+  
       if (response.ok) {
         console.log(
           selectedPaciente
@@ -204,6 +204,7 @@ export default function Lista_paciente() {
       console.error("Error de red", error);
     }
   };
+  
 
   const handleGuardar = async () => {
     try {

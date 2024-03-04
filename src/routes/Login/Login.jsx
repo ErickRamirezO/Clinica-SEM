@@ -120,10 +120,6 @@ export default function Login(props) {
               />
               <div className="accionesLogin">
                 <button type="submit">Iniciar sesión</button>
-                <button type="button" onClick={signInWithGithub}>
-                  Iniciar sesión con GitHub
-                  <FontAwesomeIcon icon={faGithub} />
-                </button>
                 <Link to={`/registro`} >
                   <button>Registro</button>
                 </Link>

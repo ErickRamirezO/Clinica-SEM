@@ -148,3 +148,34 @@ button {
     height: 0px;
     color: #b4a37e;
 }
+
+.tabla1 tr td {
+    padding-bottom: 10px !important;
+}
+
+.tabla1{
+    margin-top: 30px !important;
+    border-collapse: collapse;
+    background-color: rgba(5, 26, 50, 0.7); /* Fondo oscuro semitransparente */
+    backdrop-filter: blur(10px); /* Efecto borroso */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+
+.infoDoctor{
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+}
+
+.ak{
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.ak2{
+    font-size: 15px;
+    color:#f5c6cb;
+    font-style: italic;
+}

@@ -7,6 +7,16 @@ import {  faCamera } from "@fortawesome/free-solid-svg-icons";
 import Layout from "../../components/Navbar/Navbar";
 import { useParams } from "react-router";
 import { useNavigate } from 'react-router-dom';
+import {
+  validarNombresCompletos,
+  validarApellidosCompletos,
+  validarEstatura,
+  validarTemperatura,
+  validarCedulaEcuatoriana,
+  validarNumeroTelefonico,
+  validarPeso,
+  validarCorreo
+} from '../../validate';
 
 
 export default function Registro() {
@@ -30,6 +40,53 @@ export default function Registro() {
   const [telefono, setMovil] = useState("");
   const [img_perfil, setImg] = useState("");
   
+    /*manejo de erores*/
+    const [mensajeError, setMensajeError] = useState("");
+    const [errorNombres, setErrorNombres] = useState("");
+    const [errorApellidos, setErrorApellidos] = useState("");
+    const [errorCedula, setErrorCedula] = useState("");
+    const [errorCorreo, setErrorCorreo] = useState("");
+    const [errorTelefono, setErrorTelefono] = useState("");
+  
+    const resetErrors = () => {
+      setErrorNombres("");
+      setErrorApellidos("");
+      setErrorCedula("");
+      setErrorTelefono("");
+      setErrorCorreo("");
+      setMensajeError("");
+    };
+  
+    const handleChange = (e, field) => {
+      const { value } = e.target;
+      switch (field) {
+        case 'apellido':
+          setApellido(value);
+          setErrorApellidos(!validarApellidosCompletos(value));
+          break;
+        case 'nombre':
+          setNombre(value);
+          setErrorNombres(!validarNombresCompletos(value));
+          break;
+        case 'cedula':
+          setCedula(value);
+          setErrorCedula(!validarCedulaEcuatoriana(value));
+          break;
+        case 'email':
+          setEmail(value);
+          setErrorCorreo(!validarCorreo(value));
+          break;
+        case 'movil':
+          setMovil(value);
+          setErrorTelefono(!validarNumeroTelefonico(value));
+          break;
+        // Agrega casos para los demás campos que necesitas validar
+        default:
+          break;
+      }
+    };
+  
+    /*-----------------------------------------------------------*/
   
 
   const handleSubmit= (e)=>{
@@ -101,11 +158,17 @@ export default function Registro() {
             <tr>
               <td>
                 <label htmlFor="apellido">Apellido:</label>
-                <input type="text" id="apellido" name="apellido" value={apellido} onChange={(e) => setApellido(e.target.value)} />
+                <input type="text" id="apellido" name="apellido" value={apellido} onChange={(e) => handleChange(e, 'apellido')} />
+                  {errorApellidos && !validarApellidosCompletos(apellido) && (
+                    <p className="pError">Formato de apellido incorrecto</p>
+                  )}
               </td>
               <td>
                 <label htmlFor="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} />
+                <input type="text" id="nombre" name="nombre" value={nombre} onChange={(e) => handleChange(e, 'nombre')} />
+                  {errorNombres && !validarNombresCompletos(nombre) && (
+                    <p className="pError">Formato de nombre incorrecto</p>
+                  )}
               </td>
             </tr>
             <tr>
@@ -121,17 +184,26 @@ export default function Registro() {
             <tr>
               <td>
                 <label htmlFor="email">Email:</label>
-                <input type="text" id="email" name="email" value={correo} onChange={(e) => setEmail(e.target.value)} />
+                <input type="text" id="email" name="email" value={correo} onChange={(e) => handleChange(e, 'email')} />
+                  {errorCorreo && !validarCorreo(correo) && (
+                    <p className="pError">Formato de email incorrecto</p>
+                  )}
               </td>
               <td>
                 <label htmlFor="movil">Teléfono móvil:</label>
-                <input type="text" id="movil" name="movil" value={telefono} onChange={(e) => setMovil(e.target.value)} />
+                <input type="text" id="movil" name="movil" value={telefono} onChange={(e) => handleChange(e, 'movil')} />
+                  {errorTelefono && !validarNumeroTelefonico(telefono) && (
+                    <p className="pError">Formato de teléfono móvil incorrecto</p>
+                  )}
               </td>
             </tr>
             <tr>
               <td>
                 <label htmlFor="cedula">Cédula:</label>
-                <input type="text" id="cedula" name="cedula" value={cedula} onChange={(e) => setCedula(e.target.value)} />
+                <input type="text" id="cedula" name="cedula" value={cedula} onChange={(e) => handleChange(e, 'cedula')} />
+                  {errorCedula && !validarCedulaEcuatoriana(cedula) && (
+                    <p className="pError">Formato de cédula incorrecto</p>
+                  )}
               </td>
               <td>
                 <label htmlFor="username">Usuario:</label>

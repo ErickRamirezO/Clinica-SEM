@@ -8,6 +8,9 @@ export default function Lista_doctores() {
   const [usuarios, setUsuarios] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [showModalDoctor, setShowModalDoctor] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
 
   const handleModalOpenDoctor = (doctor) => {
     setSelectedDoctor(doctor);
@@ -31,12 +34,40 @@ export default function Lista_doctores() {
       });
   }, []);
 
+  // Filtrar la lista de doctores según el término de búsqueda
+  const filteredDoctores = usuarios.filter((user) =>
+    user.role === "Doctor" &&
+    (user.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.pais.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.especialidad.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
+  // Calcular índices del primer y último elemento de la página actual
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentDoctores = filteredDoctores
+    .slice(indexOfFirstItem, indexOfLastItem);
+
+  // Cambiar de página
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <Layout>
       <div className="listaP">
         <div className="ContainerSide">
           <div className="Contenido">
             <h2 style={{ textAlign: "center" }}>Lista de doctores</h2>
+            <div className="buscador d-flex justify-content-between align-items-center">
+              <input
+                className="barraBusqueda"
+                type="text"
+                placeholder="      Buscar doctores..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+
             <table className="tabla_doctores">
               <thead>
                 <tr>
@@ -47,20 +78,39 @@ export default function Lista_doctores() {
                 </tr>
               </thead>
               <tbody>
-                {usuarios
-                  .filter((user) => user.role === "Doctor")
-                  .map((doctor) => (
-                    <tr key={doctor._id}>
-                      <td>{`${doctor.nombre} ${doctor.apellido}`}</td>
-                      <td>{doctor.pais}</td>
-                      <td>{doctor.especialidad}</td>
-                      <td>
-                        <button id="btn1" onClick={() => handleModalOpenDoctor(doctor)}>Ver Doctor</button>
-                      </td>
-                    </tr>
-                  ))}
+                {currentDoctores.map((doctor) => (
+                  <tr key={doctor._id}>
+                    <td>{`${doctor.nombre} ${doctor.apellido}`}</td>
+                    <td>{doctor.pais}</td>
+                    <td>{doctor.especialidad}</td>
+                    <td>
+                      <button id="btn1" onClick={() => handleModalOpenDoctor(doctor)}>Ver Doctor</button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
+            {/* Paginación */}
+            {filteredDoctores.length > itemsPerPage && (
+              <div className="pagination">
+                <button
+                  className="btnAtras"
+                  onClick={() => paginate(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
+                <button
+                  className="btnSiguiente"
+                  onClick={() => paginate(currentPage + 1)}
+                  disabled={
+                    currentPage === Math.ceil(filteredDoctores.length / itemsPerPage)
+                  }
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
