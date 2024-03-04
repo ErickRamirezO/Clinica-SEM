@@ -1,4 +1,4 @@
-import React , { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
 
@@ -26,50 +26,50 @@ const ModalRegistro = ({
     handleGuardar,
     mensajeError,
     setFormData
-  }) => {
-    
+}) => {
 
-  const [usuarios, setUsuarios] = useState([]);
-  const [selectedUserId, setSelectedUserId] = useState(null);
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3001/getUser/`)
-      .then((result) => {
-        console.log("Datos obtenidos:", result.data);
-        setUsuarios(result.data); // Almacenar los usuarios en el estado
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-      });
-  }, []);
+    const [usuarios, setUsuarios] = useState([]);
+    const [selectedUserId, setSelectedUserId] = useState(null);
 
-  const handleUserSelect = (userId) => {
-    setSelectedUserId(userId);
-    // Verificar si la lista de usuarios se ha cargado correctamente
-    if (usuarios.length > 0) {
-      // Obtener los detalles del usuario seleccionado y establecerlos en los campos de entrada
-      const selectedUser = usuarios.find((user) => user._id === userId);
-      console.log("selectedUser:", selectedUser);
-      if (selectedUser) {
-        setFormData({
-          ...formData,
-          nombres: selectedUser.nombre,
-          apellidos: selectedUser.apellido,
-          fechaNacimiento: selectedUser.nacimiento,
-          cedula: selectedUser.cedula,
-          telefono: selectedUser.telefono,
-          correo: selectedUser.correo,
-          img:selectedUser.img_perfil
-        });
-        console.log("formData after update:", formData);
-      }
-    }
-  };
-    
-      
-      
-      
+    useEffect(() => {
+        axios
+            .get(`http://localhost:3001/getUser/`)
+            .then((result) => {
+                console.log("Datos obtenidos:", result.data);
+                setUsuarios(result.data); // Almacenar los usuarios en el estado
+            })
+            .catch((error) => {
+                console.error("Error fetching user data:", error);
+            });
+    }, []);
+
+    const handleUserSelect = (userId) => {
+        setSelectedUserId(userId);
+        // Verificar si la lista de usuarios se ha cargado correctamente
+        if (usuarios.length > 0) {
+            // Obtener los detalles del usuario seleccionado y establecerlos en los campos de entrada
+            const selectedUser = usuarios.find((user) => user._id === userId);
+            console.log("selectedUser:", selectedUser);
+            if (selectedUser) {
+                setFormData({
+                    ...formData,
+                    nombres: selectedUser.nombre,
+                    apellidos: selectedUser.apellido,
+                    fechaNacimiento: selectedUser.nacimiento,
+                    cedula: selectedUser.cedula,
+                    telefono: selectedUser.telefono,
+                    correo: selectedUser.correo,
+                    img: selectedUser.img_perfil
+                });
+                console.log("formData after update:", formData);
+            }
+        }
+    };
+
+
+
+
 
 
 
@@ -85,48 +85,48 @@ const ModalRegistro = ({
                 </div>
                 <form>
                     <div className="form-group row">
-                        
-                    <label className="col-sm-3 col-form-label">
-                    Seleccionar Paciente:
-                    </label>
-                    <div className="col-sm-9">
-                    <select
-                        name="TodosPacientes"
-                        id="topacientes"
-                        onChange={(e) => handleUserSelect(e.target.value)}
-                    >
-                        <option value="">Seleccionar usuario...</option>
-                        {usuarios.map((user) => (
-                        <option key={user._id} value={user._id}>
-                            {user.nombre} {user.apellido}
-                        </option>
-                        ))}
-                    </select>
 
-                    </div>
+                        <label className="col-sm-3 col-form-label">
+                            Seleccionar Paciente:
+                        </label>
+                        <div className="col-sm-9">
+                            <select
+                                name="TodosPacientes"
+                                id="topacientes"
+                                onChange={(e) => handleUserSelect(e.target.value)}
+                            >
+                                <option value="">Seleccionar usuario...</option>
+                                {usuarios.map((user) => (
+                                    <option key={user._id} value={user._id}>
+                                        {user.nombre} {user.apellido}
+                                    </option>
+                                ))}
+                            </select>
+
+                        </div>
                     </div>
                     <div className="form-group row">
-                        
+
                         <label className="col-sm-3 col-form-label">Nombres Completos:</label>
                         <div className="col-sm-9">
-                        
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="nombres"
-                            value={formData.nombres} // Usar el estado del nombre aquí
-                            onChange={handleInputChange}
-                            placeholder="nombre1 nombre2"
-                        />
 
-                        <input
-                            type="text"
-                            className=" none"
-                            name="nombres"
-                            value={formData.img} // Usar el estado del nombre aquí
-                            onChange={handleInputChange}
-                            placeholder="nombre1 nombre2"
-                        />
+                            <input
+                                type="text"
+                                className="form-control"
+                                name="nombres"
+                                value={formData.nombres} // Usar el estado del nombre aquí
+                                onChange={handleInputChange}
+                                placeholder="nombre1 nombre2"
+                            />
+
+                            <input
+                                type="text"
+                                className=" none"
+                                name="nombres"
+                                value={formData.img} // Usar el estado del nombre aquí
+                                onChange={handleInputChange}
+                                placeholder="nombre1 nombre2"
+                            />
                             {errorNombres && !validarNombresCompletos(formData.nombres) && (
                                 <p className="pError">Formato de nombres incorrecto</p>
                             )}
@@ -151,7 +151,7 @@ const ModalRegistro = ({
                     <div className="form-group row">
                         <label className="col-sm-3 col-form-label">Fecha de Nacimiento:</label>
                         <div className="col-sm-9">
-                            
+
                             <input
                                 type="text"
                                 className="form-control"
@@ -162,7 +162,7 @@ const ModalRegistro = ({
                             />
                         </div>
                     </div>
-                    
+
                     <div className="form-group row">
                         <label className="col-sm-3 col-form-label">Cédula:</label>
                         <div className="col-sm-9">
