@@ -90,12 +90,6 @@ const SideNav = ({ id, role }) => {
             <p>Chat</p>
           </Link>
         )}
-        {(role === 'Paciente') && (
-          <Link to={`/historial-paciente/${id}/${id}`} className="sidenav-link">
-            <FontAwesomeIcon icon={faHistory} />
-            <p>Historial</p>
-          </Link>
-        )}
 
         {(role === 'Administrador' || role === 'Doctor') && (
           <Link to={`/registrar/${id}`} className="sidenav-link">
