@@ -56,3 +56,18 @@ app.get('/getUser', (req, res) => {
     .then(users => res.json(users))
     .catch(err => res.json(err))
 });
+
+// Actualizar un usuario existente
+app.put('/updateUser/:id', (req, res) => {
+  const id = req.params.id;
+  const updatedUserData = req.body; // Datos actualizados del usuario
+
+  User.findByIdAndUpdate(id, updatedUserData, { new: true })
+    .then(updatedUser => {
+      if (!updatedUser) {
+        return res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+      res.json(updatedUser);
+    })
+    .catch(err => res.status(500).json({ message: err.message }));
+});

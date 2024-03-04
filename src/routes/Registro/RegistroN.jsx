@@ -89,6 +89,18 @@ export default function RegistroN() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    //chat
+    axios
+      .post("http://localhost:3001/auth/registro-chat-engine", {
+        username,
+        secret:password,
+        email:correo,
+        first_name:nombre,
+        last_name:apellido,
+      })
+      .then((r) => props.onAuth({ ...r.data, secret:password })) // NOTE: over-ride secret
+      .catch((e) => console.log(JSON.stringify(e.response.data)));
+      
     // Validar campos antes de enviar el formulario
     if (errorApellidos || errorNombres || errorCedula || errorCorreo || errorTelefono) {
       setMensajeError("Por favor corrija los errores antes de enviar el formulario.");

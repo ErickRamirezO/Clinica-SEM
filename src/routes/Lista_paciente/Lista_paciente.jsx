@@ -16,8 +16,6 @@ import {
 import ModalRegistro from "./ModalRegistro";
 import ModalUpdate from "./ModalUpdate";
 import Modal_HistorialPaciente from "../Historial/Modal_HistorialPaciente";
-import Historial from "../Historial/Modal_HistorialPaciente";
-
 
 export default function Lista_paciente() {
   const { id } = useParams();

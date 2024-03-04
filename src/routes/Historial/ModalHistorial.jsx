@@ -18,20 +18,30 @@ const ModalHistorial = ({
     });
 
     const [doctores, setDoctores] = useState([]);
+    const [especialidades, setEspecialidades] = useState([]);
 
-    const cargarDoctoresEspecialidad = async (especialidad) => {
-        try {
-            const response = await fetch(`http://localhost:3001/auth/doctores-especialidad/${especialidad}`);
-            if (response.ok) {
-                const data = await response.json();
-                setDoctores(data);
-            } else {
-                console.error('Error al obtener los doctores');
+
+    useEffect(() => {
+        const cargarEspecialidadesDoctores = async () => {
+            try {
+                const response = await fetch('http://localhost:3001/auth/especialidades-doctores');
+                if (response.ok) {
+                    const especialidades = await response.json();
+                    setEspecialidades(especialidades); // Asume que tienes un estado llamado `especialidades` para guardarlas
+                } else {
+                    console.error('Error al obtener especialidades');
+                }
+            } catch (error) {
+                console.error('Error de red al obtener especialidades:', error);
             }
-        } catch (error) {
-            console.error('Error de red:', error);
+        };
+
+        if (showModal) { // Asume que `showModal` controla la visibilidad del modal
+            cargarEspecialidadesDoctores();
         }
-    };
+    }, [showModal]); // Dependencias: Recargar especialidades cada vez que el modal se muestra
+
+
 
     const handleInputChange = (e) => {
         setFormValues({
@@ -113,16 +123,12 @@ const ModalHistorial = ({
                                 className="form-control"
                                 name="especialidad"
                                 value={formValues.especialidad}
-                                onChange={(e) => {
-                                    handleInputChange(e);
-                                    cargarDoctoresEspecialidad(e.target.value);
-                                }}
+                                onChange={handleInputChange}
                             >
                                 <option value="">Selecciona una especialidad</option>
-                                <option value="Cardiología">Cardiología</option>
-                                <option value="Dermatología">Dermatología</option>
-                                <option value="Gastroenterología">Gastroenterología</option>
-                                <option value="Neurología">Neurología</option>
+                                {especialidades.map((especialidad, index) => (
+                                    <option key={index} value={especialidad}>{especialidad}</option>
+                                ))}
                             </select>
                         </div>
                     </div>

@@ -285,14 +285,32 @@ router.get('/obtener-historiales/:cedula', async (req, res) => {
 // Ruta para obtener la lista de doctores por especialidad
 router.get('/doctores-especialidad/:especialidad', async (req, res) => {
   try {
-      const { especialidad } = req.params;
-      const doctores = await Doctor.find({ especialidad });
+    const { especialidad } = req.params;
+    const doctores = await User.find({ especialidad });
 
-      res.status(200).json(doctores);
+    res.status(200).json(doctores);
   } catch (error) {
-      res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
+
+// Ruta para obtener las especialidades únicas de los doctores
+router.get('/especialidades-doctores', async (req, res) => {
+  try {
+    // Busca todos los doctores
+    const doctores = await User.find({ role: 'Doctor' });
+    // Extrae las especialidades de los doctores
+    const especialidades = doctores.map(doctor => doctor.especialidad);
+    // Filtra las especialidades para evitar duplicados
+    const especialidadesUnicas = [...new Set(especialidades)];
+
+    res.status(200).json(especialidadesUnicas);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 
 
 //--------------------------------------------------------------------------------------------------DOCTORES
