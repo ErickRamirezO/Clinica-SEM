@@ -91,6 +91,7 @@ const ModalRegistro = ({
                         </label>
                         <div className="col-sm-9">
                             <select
+                            className="form-control"
                                 name="TodosPacientes"
                                 id="topacientes"
                                 onChange={(e) => handleUserSelect(e.target.value)}
@@ -158,7 +159,7 @@ const ModalRegistro = ({
                                 name="fechaNacimiento"
                                 value={formData.fechaNacimiento}
                                 onChange={handleInputChange}
-                                placeholder="apellido1 apellido2"
+                                placeholder="dd/mm/aaaa"
                             />
                         </div>
                     </div>

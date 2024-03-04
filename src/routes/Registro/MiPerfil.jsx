@@ -151,18 +151,20 @@ export default function miPerfil() {
               <input type="text" id="usuario" name="usuario" value ={role} />
             </td>
           </tr>
+          {(role === 'Doctor') && (
           <tr>
             <td>
               {" "}
               <label for="especialidad">Especialidad:</label>
             </td>
-          </tr>
+          </tr>)}
+          {(role === 'Doctor') && (
           <tr>
             <td>
               {" "}
               <input type="text" id="especialidad" name="especialidad"  value={especialidad}/>
             </td>
-          </tr>
+          </tr>)}
         </table>
         <h2 className="TitulosR"> &nbsp; &nbsp; Iformación Demografica</h2>
         <table className="datosRegistrar">

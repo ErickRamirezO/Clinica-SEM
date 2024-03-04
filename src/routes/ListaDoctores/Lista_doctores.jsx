@@ -280,9 +280,7 @@ export default function Lista_doctores() {
           <div className="Contenido">
             <h2 style={{ textAlign: "center" }}>Lista de doctores</h2>
             <div className="buscador d-flex justify-content-between align-items-center">
-              <button id="btnAddDoctor" onClick={handleModalOpen}>
-                Añadir doctor
-              </button>
+              
               {/* Barra de búsqueda */}
               <input
                 className="barraBusqueda"
@@ -313,9 +311,7 @@ export default function Lista_doctores() {
                       <Link to={`/historial-doctores/${doctores._id}`}>
                         <button id="btn1">Ver doctores</button>
                       </Link>
-                      <button id="btnActualizarDoctor" onClick={() => handleUpdateModalOpen(doctores)}>
-                        Actualizar
-                      </button>
+                      
                     </td>
                   </tr>
                 ))}
