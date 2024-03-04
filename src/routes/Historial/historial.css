@@ -205,7 +205,10 @@
     height: 30px;
 }
 
-
+.modal-content{
+    width: 1200px;
+    margin-left:-200px;
+}
 
 
 

@@ -265,23 +265,6 @@ router.get('/paciente-historial/:id', async (req, res) => {
   }
 });
 
-
-// Ruta para obtener historiales por cedula de paciente
-router.get('/obtener-historiales/:cedula', async (req, res) => {
-  try {
-    const { cedula } = req.params;
-    const historiales = await Historial.find({ cedula });
-
-    if (historiales.length === 0) {
-      return res.status(404).json({ error: 'No hay historiales médicos para este paciente' });
-    }
-
-    res.status(200).json(historiales);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
 // Ruta para obtener la lista de doctores por especialidad
 router.get('/doctores-especialidad/:especialidad', async (req, res) => {
   try {
@@ -314,43 +297,15 @@ router.get('/especialidades-doctores', async (req, res) => {
 
 
 //--------------------------------------------------------------------------------------------------DOCTORES
-// Ruta para registrar un nuevo doctor
-router.post('/registro-doctores', async (req, res) => {
+// Ruta para obtener informacion del doctor
+router.get('/obtener-Doctores/:id', async (req, res) => {
   try {
-    const {
-      fechaCreacion,
-      nombres,
-      apellidos,
-      cedula,
-      fechaNacimiento,
-      telefono,
-      correo,
-      especialidad,
-    } = req.body;
+    const { cedula } = req.params;
+    const doctores = await User.find({ _id });
 
-    const nuevoDoctor = new Doctor({
-      fechaCreacion,
-      nombres,
-      apellidos,
-      cedula,
-      fechaNacimiento,
-      telefono,
-      correo,
-      especialidad,
-    });
-
-    await nuevoDoctor.save();
-
-    res.status(201).json({ message: 'Doctor registrado exitosamente' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Ruta para obtener la lista de doctores
-router.get('/lista-doctores', async (req, res) => {
-  try {
-    const doctores = await Doctor.find();
+    if (doctores.length === 0) {
+      return res.status(404).json({ error: 'No hay médicos' });
+    }
 
     res.status(200).json(doctores);
   } catch (error) {
@@ -358,21 +313,5 @@ router.get('/lista-doctores', async (req, res) => {
   }
 });
 
-
-// Ruta para actualizar un doctor
-router.put('/actualizar-doctores/:id', async (req, res) => {
-  try {
-    const doctorId = req.params.id;
-    const updatedDoctor = req.body;
-
-    // Realiza la actualización en la base de datos
-    const result = await Doctor.findByIdAndUpdate(doctorId, updatedDoctor, { new: true });
-
-    res.json(result);
-  } catch (error) {
-    console.error('Error al actualizar Doctor:', error);
-    res.status(500).json({ error: 'Error al actualizar Doctor' });
-  }
-});
 
 module.exports = router;
